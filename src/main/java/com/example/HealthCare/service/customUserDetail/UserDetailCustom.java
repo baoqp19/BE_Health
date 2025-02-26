@@ -26,7 +26,9 @@ public class UserDetailCustom implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
         com.example.HealthCare.model.User user = this.userService.handleGetUserByEmail(username);
-
+        if (user == null) {
+            throw new UsernameNotFoundException("Username/password không hợp lệ");
+        }
         return new User(
 
                 user.getEmail(),

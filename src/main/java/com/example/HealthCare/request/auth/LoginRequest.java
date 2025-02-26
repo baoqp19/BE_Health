@@ -1,21 +1,20 @@
 package com.example.HealthCare.request.auth;
 
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 @Data
 @Builder
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @Setter
 public class LoginRequest {
 
-  @NotNull(message = "Email is required")
-  @Email(message = "Email should be valid")
+  @NotBlank(message = "email không được để trổng")
+  @Email(message = "email phải đúng đing dạng")
   private String email;
 
-  @NotNull(message = "Password is required")
+  @NotBlank(message = "password không được để trống")
   String password;
 }
