@@ -1,5 +1,7 @@
 package com.example.HealthCare.request.auth;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,6 +12,8 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ResTokenLogin {
+
+    @JsonProperty("access_token") // ánh xạ muốn tên hiển trị API trả ra là access_token thì dùng
     private String accessToken;
 
     private UserLogin user;

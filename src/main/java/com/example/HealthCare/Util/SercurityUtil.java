@@ -16,7 +16,10 @@ import com.example.HealthCare.request.auth.ResTokenLogin;
 
 @Service
 public class SercurityUtil {
+
+
     private final JwtEncoder jwtEncoder;
+    
     public static final MacAlgorithm JW_ALGORITHM = MacAlgorithm.HS512;
 
     public SercurityUtil(JwtEncoder jwtEncoder) {

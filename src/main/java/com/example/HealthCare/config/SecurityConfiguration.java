@@ -24,7 +24,6 @@ import com.example.HealthCare.Util.SercurityUtil;
 import com.nimbusds.jose.jwk.source.ImmutableSecret;
 import com.nimbusds.jose.util.Base64;
 
-
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
@@ -61,8 +60,9 @@ public class SecurityConfiguration {
 			CustomLogoutHandler customLogoutHandler, CustomAuthenticationEntryPoint customAuthenticationEntryPoint)
 			throws Exception {
 		return http
-				.csrf(AbstractHttpConfigurer::disable)
+				.csrf(c -> c.disable()) // vì cần truyên lên token mới co request trên api
 				.cors(Customizer.withDefaults()) // cấu hình mặc đinh cors, và thêm filter bên CorsConfig để chèn filter
+													// vào
 				.authorizeHttpRequests(auth -> auth
 						.requestMatchers(WHITE_LIST_URL).permitAll() // Cho phép truy cập danh sách URL mở
 
@@ -78,11 +78,11 @@ public class SecurityConfiguration {
 				// AuthenticationProvider
 				// .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
 				.formLogin(f -> f.disable())
-				.logout(logout -> logout
-						.logoutUrl("/api/v1/auth/logout") // Định nghĩa URL logout
-						.addLogoutHandler(customLogoutHandler) // Xử lý logout tùy chỉnh
-						.logoutSuccessHandler(
-								(request, response, authentication) -> SecurityContextHolder.clearContext()))
+				// .logout(logout -> logout
+				// .logoutUrl("/api/v1/auth/logout") // Định nghĩa URL logout
+				// .addLogoutHandler(customLogoutHandler) // Xử lý logout tùy chỉnh
+				// .logoutSuccessHandler(
+				// (request, response, authentication) -> SecurityContextHolder.clearContext()))
 				.build();
 	}
 
@@ -117,6 +117,8 @@ public class SecurityConfiguration {
 				getSecretKey()).macAlgorithm(SercurityUtil.JW_ALGORITHM).build();
 		return token -> {
 			try {
+				System.out.println("Token received: " + token);
+
 				return jwtDecoder.decode(token);
 			} catch (Exception e) {
 				System.out.println(">>> JWT error: " + e.getMessage());
