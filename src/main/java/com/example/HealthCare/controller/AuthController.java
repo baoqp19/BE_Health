@@ -1,8 +1,10 @@
 package com.example.HealthCare.controller;
 
 import com.example.HealthCare.Util.SercurityUtil;
+import com.example.HealthCare.model.User;
 import com.example.HealthCare.request.auth.LoginRequest;
 import com.example.HealthCare.request.auth.ResTokenLogin;
+import com.example.HealthCare.service.UserService;
 
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -22,10 +24,13 @@ public class AuthController {
 
   private final AuthenticationManagerBuilder authenticationManagerBuilder;
   private final SercurityUtil sercurityUtil;
+  private final UserService userService;
 
-  public AuthController(AuthenticationManagerBuilder authenticationManagerBuilder, SercurityUtil sercurityUtil) {
+  public AuthController(AuthenticationManagerBuilder authenticationManagerBuilder, SercurityUtil sercurityUtil,
+      UserService userService) {
     this.authenticationManagerBuilder = authenticationManagerBuilder;
     this.sercurityUtil = sercurityUtil;
+    this.userService = userService;
   }
 
   @PostMapping("/login")
@@ -40,11 +45,18 @@ public class AuthController {
 
     String access_token = this.sercurityUtil.createToken(authenticateAction);
     ResTokenLogin res = new ResTokenLogin();
+    User currentUserDB = this.userService.handleGetUserByEmail(loginRequest.getEmail());
+    if (currentUserDB != null) {
+      ResTokenLogin.UserLogin userLogin = new ResTokenLogin.UserLogin(
+          currentUserDB.getId(),
+          currentUserDB.getEmail(),
+          currentUserDB.getFirstname(),
+          currentUserDB.getLastname());
+      res.setUser(userLogin);
+    }
     res.setAccessToken(access_token);
     return ResponseEntity.ok().body(res);
 
   }
-
-  
 
 }

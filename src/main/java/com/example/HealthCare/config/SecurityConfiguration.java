@@ -1,6 +1,5 @@
 package com.example.HealthCare.config;
 
-import org.apache.catalina.security.SecurityUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,7 +24,6 @@ import com.example.HealthCare.Util.SercurityUtil;
 import com.nimbusds.jose.jwk.source.ImmutableSecret;
 import com.nimbusds.jose.util.Base64;
 
-import static com.example.HealthCare.enums.Permission.*;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
