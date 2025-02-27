@@ -9,4 +9,6 @@ public interface UserService {
     public User handleGetUserByEmail(String username);
 
     public void changePassword(ChangePasswordRequest request, Principal connectedUser);
+
+    public void updateUserToken(String token, String email);
 }

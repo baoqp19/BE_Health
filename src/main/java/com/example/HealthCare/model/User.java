@@ -34,6 +34,9 @@ public class User {
   @Enumerated(EnumType.STRING)
   private Role role;
 
+  @Column(columnDefinition = "MEDIUMTEXT")
+  private String refreshToken;
+
   @OneToMany(mappedBy = "user")
   private List<Token> tokens;
 

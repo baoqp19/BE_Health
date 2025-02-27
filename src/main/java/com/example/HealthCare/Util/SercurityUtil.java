@@ -12,6 +12,8 @@ import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.stereotype.Service;
 
+import com.example.HealthCare.request.auth.ResTokenLogin;
+
 @Service
 public class SercurityUtil {
     private final JwtEncoder jwtEncoder;
@@ -21,13 +23,23 @@ public class SercurityUtil {
         this.jwtEncoder = jwtEncoder;
     }
 
-    @Value("${EXPIRATION}")
+    @Value("${EXPIRATION_ACCESS_TOKEN}")
     private long jwtExpiretion;
 
-    public String createToken(Authentication authenticate) {
+    @Value("${SECRET_KEY}")
+    private String jwtKey;
+
+    @Value("${EXPIRATION_ACCESS_TOKEN}")
+    private long accessTokenExpiration;
+
+    @Value("${EXPIRATION_REFRESH_TOKEN}")
+    private long refreshTokenExpiration;
+
+    public String createAccessToken(Authentication authenticate) {
+
         // lấy thời gian ban đầu token
         Instant now = Instant.now();
-        Instant validity = now.plus(this.jwtExpiretion, ChronoUnit.SECONDS);
+        Instant validity = now.plus(this.accessTokenExpiration, ChronoUnit.SECONDS);
 
         JwtClaimsSet claims = JwtClaimsSet.builder()
                 .issuedAt(now)
@@ -38,5 +50,22 @@ public class SercurityUtil {
 
         JwsHeader jwsHeader = JwsHeader.with(JW_ALGORITHM).build();
         return this.jwtEncoder.encode(JwtEncoderParameters.from(jwsHeader, claims)).getTokenValue();
+    }
+
+    public String createRefreshToken(String email, ResTokenLogin dto) {
+        Instant now = Instant.now();
+        Instant validity = now.plus(this.refreshTokenExpiration, ChronoUnit.SECONDS);
+
+        // @formatter:off
+        JwtClaimsSet claims = JwtClaimsSet.builder()
+            .issuedAt(now)
+            .expiresAt(validity)
+            .subject(email)
+            .claim("user", dto.getUser())
+            .build();
+
+        JwsHeader jwsHeader = JwsHeader.with(JW_ALGORITHM).build();
+        return this.jwtEncoder.encode(JwtEncoderParameters.from(jwsHeader, claims)).getTokenValue();
+
     }
 }
