@@ -8,6 +8,7 @@ import com.example.HealthCare.service.UserService;
 
 import jakarta.validation.Valid;
 
+import org.apache.catalina.security.SecurityUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
@@ -15,6 +16,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.io.IOException;
 
 @RestController
-@RequestMapping("/api/v1/auth")
+@RequestMapping("/api/v1")
 public class AuthController {
 
   @Value("${EXPIRATION_REFRESH_TOKEN}")
@@ -40,7 +43,7 @@ public class AuthController {
     this.userService = userService;
   }
 
-  @PostMapping("/login")
+  @PostMapping("/auth/login")
   public ResponseEntity<ResTokenLogin> login(@Valid @RequestBody LoginRequest loginRequest) {
 
     // nạp input gồm username/ password vào Security
@@ -50,7 +53,8 @@ public class AuthController {
 
     Authentication authenticateAction = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
-    String access_token = this.sercurityUtil.createAccessToken(authenticateAction);
+    // set thông tin người dùng đăng nhập vào context (có thể sử dụng sau này)
+    SecurityContextHolder.getContext().setAuthentication(authenticateAction);
 
     ResTokenLogin res = new ResTokenLogin();
 
@@ -63,6 +67,8 @@ public class AuthController {
           currentUserDB.getLastname());
       res.setUser(userLogin);
     }
+    String access_token = this.sercurityUtil.createAccessToken(authenticateAction, res.getUser());
+
     res.setAccessToken(access_token);
 
     String refresh_token = this.sercurityUtil.createRefreshToken(loginRequest.getEmail(), res);
@@ -82,6 +88,25 @@ public class AuthController {
         .header(HttpHeaders.SET_COOKIE, resCookies.toString())
 
         .body(res);
+  }
+
+  @GetMapping("/auth/account")
+  public ResponseEntity<ResTokenLogin.UserLogin> getAccount() {
+    String email = SercurityUtil.getCurrentUserLogin().isPresent()
+        ? SercurityUtil.getCurrentUserLogin().get()
+        : "";
+
+    User currentUserDB = this.userService.handleGetUserByEmail(email);
+
+    ResTokenLogin.UserLogin userLogin = new ResTokenLogin.UserLogin();
+    if (currentUserDB != null) {
+      userLogin.setId(currentUserDB.getId());
+      userLogin.setEmail(currentUserDB.getEmail());
+      userLogin.setFirstName(currentUserDB.getFirstname());
+      userLogin.setLastName(currentUserDB.getLastname());
+    }
+
+    return ResponseEntity.ok().body(userLogin);
   }
 
 }
