@@ -60,9 +60,11 @@ public class SecurityConfiguration {
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http,
-			CustomLogoutHandler customLogoutHandler) throws Exception {
+			CustomLogoutHandler customLogoutHandler, CustomAuthenticationEntryPoint customAuthenticationEntryPoint)
+			throws Exception {
 		return http
 				.csrf(AbstractHttpConfigurer::disable)
+				.cors(Customizer.withDefaults()) // cấu hình mặc đinh cors, và thêm filter bên CorsConfig để chèn filter
 				.authorizeHttpRequests(auth -> auth
 						.requestMatchers(WHITE_LIST_URL).permitAll() // Cho phép truy cập danh sách URL mở
 
@@ -71,12 +73,13 @@ public class SecurityConfiguration {
 						.anyRequest().authenticated())
 
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-				.oauth2ResourceServer((oauth2) -> oauth2.jwt(Customizer.withDefaults()))
+				.oauth2ResourceServer((oauth2) -> oauth2.jwt(Customizer.withDefaults())
 
+						.authenticationEntryPoint(customAuthenticationEntryPoint))
 				// .authenticationProvider(authenticationProvider) // Cung cấp
 				// AuthenticationProvider
 				// .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-
+				.formLogin(f -> f.disable())
 				.logout(logout -> logout
 						.logoutUrl("/api/v1/auth/logout") // Định nghĩa URL logout
 						.addLogoutHandler(customLogoutHandler) // Xử lý logout tùy chỉnh
