@@ -42,7 +42,6 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
 
         mapper.writeValue(response.getWriter(), res);
 
-        throw new UnsupportedOperationException("Unimplemented method 'commence'");
     }
 
 }

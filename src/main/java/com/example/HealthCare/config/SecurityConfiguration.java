@@ -1,5 +1,6 @@
 package com.example.HealthCare.config;
 
+import org.apache.catalina.security.SecurityUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,6 +13,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
@@ -57,7 +59,7 @@ public class SecurityConfiguration {
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http,
-			CustomLogoutHandler customLogoutHandler, CustomAuthenticationEntryPoint customAuthenticationEntryPoint)
+			CustomAuthenticationEntryPoint customAuthenticationEntryPoint)
 			throws Exception {
 		return http
 				.csrf(c -> c.disable()) // vì cần truyên lên token mới co request trên api
@@ -67,7 +69,7 @@ public class SecurityConfiguration {
 						.requestMatchers(WHITE_LIST_URL).permitAll() // Cho phép truy cập danh sách URL mở
 
 						.requestMatchers(HttpMethod.GET, "/api/v1/auth/me").authenticated()
-						.requestMatchers("/", "/login").permitAll()
+						.requestMatchers("/", "/api/v1/auth/login", "/api/v1/auth/refresh").permitAll()
 						.anyRequest().authenticated())
 
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -125,6 +127,17 @@ public class SecurityConfiguration {
 				throw e;
 			}
 		};
+	}
+
+	public Jwt checkValidRefreshToken(String token) {
+		NimbusJwtDecoder jwtDecoder = NimbusJwtDecoder.withSecretKey(
+				getSecretKey()).macAlgorithm(SercurityUtil.JW_ALGORITHM).build();
+		try {
+			return jwtDecoder.decode(token);
+		} catch (Exception e) {
+			System.out.println(">>> Refresh Token error: " + e.getMessage());
+			throw e;
+		}
 	}
 
 }

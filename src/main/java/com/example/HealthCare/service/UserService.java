@@ -11,4 +11,6 @@ public interface UserService {
     public void changePassword(ChangePasswordRequest request, Principal connectedUser);
 
     public void updateUserToken(String token, String email);
+
+    public User getUserByRefreshTokenAndEmail(String token, String email);
 }
