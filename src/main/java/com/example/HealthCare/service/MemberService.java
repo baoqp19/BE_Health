@@ -20,4 +20,6 @@ public interface MemberService {
     Page<Member> getAllMembers(int page, int size, String keyword);
 
     public ResultPaginationDTO getAllMember(Pageable pageable);
+
+    
 }

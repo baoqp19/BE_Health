@@ -80,19 +80,33 @@ public class MemberController {
         return new ResponseEntity<>(member, HttpStatus.OK);
     }
 
+    // @GetMapping("/members")
+    // public ResponseEntity<ResultPaginationDTO> getAllMember(
+    // @RequestParam("current") Optional<String> currentOptional,
+    // @RequestParam("pageSize") Optional<String> pageSizeOptional) {
+
+    // String sCurrent = currentOptional.isPresent() ? currentOptional.get() : "";
+    // String sPageSize = pageSizeOptional.isPresent() ? pageSizeOptional.get() :
+    // "";
+
+    // int current = Integer.parseInt(sCurrent);
+    // int pageSize = Integer.parseInt(sPageSize);
+
+    // Pageable pageable = PageRequest.of(current - 1, pageSize);
+
+    // return
+    // ResponseEntity.status(HttpStatus.OK).body(this.memberService.getAllMember(pageable));
+    // }
+
     @GetMapping("/members")
-    public ResponseEntity<ResultPaginationDTO> getAllMember(
-            @RequestParam("current") Optional<String> currentOptional,
-            @RequestParam("pageSize") Optional<String> pageSizeOptional) {
+    public ResponseEntity<List<Member>> getAllMembers(
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "8") int size,
+            @RequestParam(defaultValue = "") String keyword) {
+        Page<Member> membersPage = memberService.getAllMembers(page, size, keyword);
 
-        String sCurrent = currentOptional.isPresent() ? currentOptional.get() : "";
-        String sPageSize = pageSizeOptional.isPresent() ? pageSizeOptional.get() : "";
+        List<Member> membersContent = membersPage.getContent();
 
-        int current = Integer.parseInt(sCurrent);
-        int pageSize = Integer.parseInt(sPageSize);
-
-        Pageable pageable = PageRequest.of(current - 1, pageSize);
-
-        return ResponseEntity.status(HttpStatus.OK).body(this.memberService.getAllMember(pageable));
+        return new ResponseEntity<>(membersContent, HttpStatus.OK);
     }
 }
