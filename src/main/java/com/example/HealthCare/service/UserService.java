@@ -19,4 +19,6 @@ public interface UserService {
     boolean isEmailExist(String email);
 
     public User handleCreateUser(RegisterRequest registerRequest);
+
+    
 }
