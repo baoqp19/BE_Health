@@ -1,7 +1,11 @@
 package com.example.HealthCare.request.member;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+
 import com.example.HealthCare.enums.BloodGroudEnum;
 import com.example.HealthCare.enums.GenderEnum;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -26,7 +30,8 @@ public class AddMemberRequest {
 
   @NotNull(message = "DateOfBirth is required")
   @Past(message = "DateOfBirth must be a past date")
-  private java.time.LocalDate dateOfBirth;
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+  private LocalDateTime dateOfBirth;
 
   @Enumerated(EnumType.STRING)
   private GenderEnum gender;
@@ -34,7 +39,6 @@ public class AddMemberRequest {
   @NotBlank(message = "Relationship is required")
   private String relationship;
 
-  @NotBlank(message = "BloodType is required")
   @Enumerated(EnumType.STRING)
   private BloodGroudEnum bloodType;
 

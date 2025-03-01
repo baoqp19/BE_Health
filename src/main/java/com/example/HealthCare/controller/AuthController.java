@@ -95,6 +95,7 @@ public class AuthController {
 
   @GetMapping("/auth/account")
   public ResponseEntity<ResTokenLogin.UserLogin> getAccount() {
+    
     String email = SercurityUtil.getCurrentUserLogin().isPresent()
         ? SercurityUtil.getCurrentUserLogin().get()
         : "";
@@ -193,5 +194,7 @@ public class AuthController {
         .header(HttpHeaders.SET_COOKIE, deleteSpringCookie.toString())
         .body(null);
   }
+
+  
 
 }

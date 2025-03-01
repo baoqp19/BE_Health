@@ -100,6 +100,7 @@ public class SecurityConfiguration {
 		return jwtAuthenticationConverter;
 	}
 
+	
 	@Bean
 	public JwtEncoder jwtEncoder() {
 		return new NimbusJwtEncoder(new ImmutableSecret<>(getSecretKey()));
@@ -112,15 +113,13 @@ public class SecurityConfiguration {
 				SercurityUtil.JW_ALGORITHM.getName());
 	}
 
-	// dùng để giải mã token
+	// dùng để giải mã token  
 	@Bean
 	public JwtDecoder jwtDecoder() {
 		NimbusJwtDecoder jwtDecoder = NimbusJwtDecoder.withSecretKey(
 				getSecretKey()).macAlgorithm(SercurityUtil.JW_ALGORITHM).build();
 		return token -> {
 			try {
-				System.out.println("Token received: " + token);
-
 				return jwtDecoder.decode(token);
 			} catch (Exception e) {
 				System.out.println(">>> JWT error: " + e.getMessage());
