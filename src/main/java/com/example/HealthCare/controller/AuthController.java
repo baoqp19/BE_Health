@@ -1,9 +1,11 @@
 package com.example.HealthCare.controller;
 
 import com.example.HealthCare.Util.SercurityUtil;
+import com.example.HealthCare.enums.Role;
 import com.example.HealthCare.exception.defineException.IdInvalidException;
 import com.example.HealthCare.model.User;
 import com.example.HealthCare.request.auth.LoginRequest;
+import com.example.HealthCare.request.auth.RegisterRequest;
 import com.example.HealthCare.request.auth.ResTokenLogin;
 import com.example.HealthCare.service.UserService;
 
@@ -19,6 +21,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,11 +41,17 @@ public class AuthController {
   private final SercurityUtil sercurityUtil;
   private final UserService userService;
 
-  public AuthController(AuthenticationManagerBuilder authenticationManagerBuilder, SercurityUtil sercurityUtil,
-      UserService userService) {
+  private final PasswordEncoder passwordEncoder;
+
+  public AuthController(
+      AuthenticationManagerBuilder authenticationManagerBuilder,
+      SercurityUtil sercurityUtil,
+      UserService userService,
+      PasswordEncoder passwordEncoder) {
     this.authenticationManagerBuilder = authenticationManagerBuilder;
     this.sercurityUtil = sercurityUtil;
     this.userService = userService;
+    this.passwordEncoder = passwordEncoder;
   }
 
   @PostMapping("/auth/login")
@@ -95,7 +104,7 @@ public class AuthController {
 
   @GetMapping("/auth/account")
   public ResponseEntity<ResTokenLogin.UserLogin> getAccount() {
-    
+
     String email = SercurityUtil.getCurrentUserLogin().isPresent()
         ? SercurityUtil.getCurrentUserLogin().get()
         : "";
@@ -195,6 +204,26 @@ public class AuthController {
         .body(null);
   }
 
-  
+  @PostMapping("/auth/register")
+  public ResponseEntity<User> register(@Valid @RequestBody RegisterRequest registerRequest)
+      throws IdInvalidException {
+    boolean isEmailExist = this.userService.isEmailExist(registerRequest.getEmail());
+    
+    if (isEmailExist) {
+      throw new IdInvalidException(
+          "Email " + registerRequest.getEmail() + "đã tồn tại, vui lòng sử dụng email khác.");
+    }
 
+    registerRequest.setRole(Role.USER);
+
+    String hashPassword = this.passwordEncoder.encode(registerRequest.getPassword());
+    registerRequest.setPassword(hashPassword);
+
+    User registerSuccess = this.userService.handleCreateUser(registerRequest);
+
+    return ResponseEntity.status(HttpStatus.CREATED)
+        .body(registerSuccess);
+  }
+
+  
 }
