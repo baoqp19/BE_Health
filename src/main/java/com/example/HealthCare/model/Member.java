@@ -3,6 +3,8 @@ package com.example.HealthCare.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -25,8 +27,8 @@ public class Member {
     @Column(name = "full_name", nullable = false)
     private String fullName;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+7")
-    private LocalDateTime  dateOfBirth;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private LocalDate dateOfBirth;
 
     @Column(name = "gender")
     private String gender;

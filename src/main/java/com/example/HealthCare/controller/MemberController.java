@@ -5,6 +5,7 @@ import com.example.HealthCare.dto.PaginationDTO.ResultPaginationDTO;
 import com.example.HealthCare.model.Member;
 import com.example.HealthCare.model.User;
 import com.example.HealthCare.request.member.AddMemberRequest;
+import com.example.HealthCare.request.member.UpdateMemberRequest;
 import com.example.HealthCare.response.ApiResponse;
 import com.example.HealthCare.service.MemberService;
 import com.example.HealthCare.service.UserService;
@@ -20,7 +21,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -62,9 +62,22 @@ public class MemberController {
     }
 
     @PutMapping("/members/{id}")
-    public ResponseEntity<Member> updateMember(@Valid @PathVariable("id") Integer id, @RequestBody Member member) {
-        member.setMemberID(id);
+    public ResponseEntity<Member> updateMember(@Valid @PathVariable("id") Integer id,
+            @RequestBody UpdateMemberRequest updateMemberRequest) {
+
+        Member member = Member.builder()
+                .memberID(id)
+                .fullName(updateMemberRequest.getFullName())
+                .dateOfBirth(updateMemberRequest.getDateOfBirth())
+                .gender(updateMemberRequest.getGender().name())
+                .relationship(updateMemberRequest.getRelationship())
+                .bloodType(updateMemberRequest.getBloodType().name())
+                .height(updateMemberRequest.getHeight())
+                .weight(updateMemberRequest.getWeight())
+                .build();
+
         Member updatedMember = this.memberService.updateMember(member);
+
         return ResponseEntity.ok(updatedMember);
     }
 
@@ -109,4 +122,5 @@ public class MemberController {
 
         return new ResponseEntity<>(membersContent, HttpStatus.OK);
     }
+
 }

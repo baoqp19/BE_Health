@@ -30,8 +30,8 @@ public class AddMemberRequest {
 
   @NotNull(message = "DateOfBirth is required")
   @Past(message = "DateOfBirth must be a past date")
-  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-  private LocalDateTime dateOfBirth;
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+  private java.time.LocalDate dateOfBirth;
 
   @Enumerated(EnumType.STRING)
   private GenderEnum gender;

@@ -11,17 +11,11 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class DateTimeFormatConfiguration implements WebMvcConfigurer {
 
-    @Override
-    public void addFormatters(FormatterRegistry registry) {
-
-        DateTimeFormatterRegistrar registrar = new DateTimeFormatterRegistrar();
-
-        // // Định dạng cụ thể thay vì ISO
-        // registrar.setDateFormatter(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-        // registrar.setDateTimeFormatter(DateTimeFormatter.ofPattern("yyyy-MM-dd
-        // HH:mm:ss")
-        // .withZone(ZoneId.of("Asia/Bangkok")));
-        // registrar.registerFormatters(registry);
-    }
+    // @Override
+    // public void addFormatters(FormatterRegistry registry) {
+    // DateTimeFormatterRegistrar registrar = new DateTimeFormatterRegistrar();
+    // registrar.setUseIsoFormat(true);
+    // registrar.registerFormatters(registry);
+    // }
 
 }
