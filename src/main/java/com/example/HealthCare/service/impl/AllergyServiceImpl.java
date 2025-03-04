@@ -11,14 +11,15 @@ import com.example.HealthCare.model.Allergy;
 import com.example.HealthCare.repository.AllergyRepository;
 import com.example.HealthCare.service.AllergyService;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
 
 @Service
 @Slf4j
 public class AllergyServiceImpl implements AllergyService {
 
     private final AllergyRepository allergyRepository;
+
 
     public AllergyServiceImpl(AllergyRepository allergyRepository) {
         this.allergyRepository = allergyRepository;
