@@ -1,12 +1,10 @@
 package com.example.HealthCare.controller;
 
 import com.example.HealthCare.Util.SercurityUtil;
-import com.example.HealthCare.dto.PaginationDTO.ResultPaginationDTO;
 import com.example.HealthCare.model.Member;
 import com.example.HealthCare.model.User;
 import com.example.HealthCare.request.member.AddMemberRequest;
 import com.example.HealthCare.request.member.UpdateMemberRequest;
-import com.example.HealthCare.response.ApiResponse;
 import com.example.HealthCare.service.MemberService;
 import com.example.HealthCare.service.UserService;
 
@@ -14,8 +12,6 @@ import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
