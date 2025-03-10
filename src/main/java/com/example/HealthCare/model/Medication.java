@@ -34,8 +34,10 @@ public class Medication {
     @Column(name = "name", nullable = false)
     private String name;
 
+    
     @Column(name = "frequency")
     private String frequency;
+
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @Column(name = "start_date", nullable = false)

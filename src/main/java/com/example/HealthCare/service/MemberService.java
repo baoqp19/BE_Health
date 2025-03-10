@@ -17,9 +17,8 @@ public interface MemberService {
 
     Member getMemberById(Integer memberID);
 
-    Page<Member> getAllMembers(int page, int size, String keyword);
+    Page<Member> getAllMembers(int page, int size, String keyword, Integer userID);
 
     public ResultPaginationDTO getAllMember(Pageable pageable);
 
-    
 }

@@ -47,12 +47,12 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public Page<Member> getAllMembers(int page, int size, String keyword) {
+    public Page<Member> getAllMembers(int page, int size, String keyword, Integer userID) {
         Pageable pageable = PageRequest.of(page - 1, size); // page is 0-based
         if (keyword != null && !keyword.isEmpty()) {
-            return memberRepository.findByKeyword(keyword, pageable);
+            return this.memberRepository.findByKeyword(keyword, pageable, userID);
         }
-        return memberRepository.findAll(pageable); // Use pageable for pagination
+        return this.memberRepository.findAllByUserID(pageable, userID); // Use pageable for pagination
     }
 
     @Override

@@ -106,13 +106,22 @@ public class MemberController {
     // return
     // ResponseEntity.status(HttpStatus.OK).body(this.memberService.getAllMember(pageable));
     // }
-
+    
+    
     @GetMapping("/members")
     public ResponseEntity<List<Member>> getAllMembers(
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "8") int size,
             @RequestParam(defaultValue = "") String keyword) {
-        Page<Member> membersPage = memberService.getAllMembers(page, size, keyword);
+
+        String email = SercurityUtil.getCurrentUserLogin().isPresent()
+                ? SercurityUtil.getCurrentUserLogin().get()
+                : "";
+        
+
+        User user = this.userService.handleGetUserByEmail(email);
+
+        Page<Member> membersPage = this.memberService.getAllMembers(page, size, keyword, user.getId());
 
         List<Member> membersContent = membersPage.getContent();
 
