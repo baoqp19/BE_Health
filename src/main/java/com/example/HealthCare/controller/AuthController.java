@@ -41,6 +41,7 @@ public class AuthController {
 
   private final PasswordEncoder passwordEncoder;
 
+
   public AuthController(
       AuthenticationManagerBuilder authenticationManagerBuilder,
       SercurityUtil sercurityUtil,
