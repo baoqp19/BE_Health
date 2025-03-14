@@ -7,11 +7,13 @@ import com.example.HealthCare.model.User;
 import com.example.HealthCare.request.auth.LoginRequest;
 import com.example.HealthCare.request.auth.RegisterRequest;
 import com.example.HealthCare.request.auth.ResTokenLogin;
+import com.example.HealthCare.response.ApiResponse;
+import com.example.HealthCare.response.AuthenticationResponse;
 import com.example.HealthCare.service.UserService;
 
 import jakarta.validation.Valid;
 
-import org.apache.catalina.security.SecurityUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -23,15 +25,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1")
+@Slf4j
 public class AuthController {
 
   @Value("${EXPIRATION_REFRESH_TOKEN}")
@@ -53,6 +51,7 @@ public class AuthController {
     this.userService = userService;
     this.passwordEncoder = passwordEncoder;
   }
+
 
   @PostMapping("/auth/login")
   public ResponseEntity<ResTokenLogin> login(@Valid @RequestBody LoginRequest loginRequest) {
@@ -89,6 +88,7 @@ public class AuthController {
 
     // set cookies
     ResponseCookie resCookies = ResponseCookie
+
         .from("refresh_token", refresh_token)
         .httpOnly(true) // chỉ cho server của to sử dụng
         .secure(true) // có nghĩa là cookies chỉ được sử dụng với https (http kh)
@@ -96,9 +96,9 @@ public class AuthController {
         .maxAge(refreshTokenExpiration) // thời gian hết hạn từ khi chạy
         .build();
 
+
     return ResponseEntity.ok()
         .header(HttpHeaders.SET_COOKIE, resCookies.toString())
-
         .body(res);
   }
 
@@ -112,15 +112,32 @@ public class AuthController {
     User currentUserDB = this.userService.handleGetUserByEmail(email);
 
     ResTokenLogin.UserLogin userLogin = new ResTokenLogin.UserLogin();
-    if (currentUserDB != null) {
-      userLogin.setId(currentUserDB.getId());
-      userLogin.setEmail(currentUserDB.getEmail());
-      userLogin.setFirstName(currentUserDB.getFirstname());
-      userLogin.setLastName(currentUserDB.getLastname());
-    }
-
+      if (currentUserDB != null) {
+        userLogin.setId(currentUserDB.getId());
+        userLogin.setEmail(currentUserDB.getEmail());
+        userLogin.setFirstName(currentUserDB.getFirstname());
+        userLogin.setLastName(currentUserDB.getLastname());
+      }
     return ResponseEntity.ok().body(userLogin);
   }
+
+  @GetMapping("/auth/login")
+  public ResponseEntity<String> authenticateWithUsername(
+          @RequestParam("username") String username
+  ) {
+    log.info(username);
+    // Gọi service để xác thực với username
+    this.userService.verifyEmail(username);
+
+    ApiResponse<String> response = new ApiResponse<>(
+            HttpStatus.OK.value(),
+            "Username authentication successful",
+            ""
+    );
+
+    return ResponseEntity.ok().body(response.getData());
+  }
+
 
   @GetMapping("/auth/refresh")
   public ResponseEntity<ResTokenLogin> getRefreshToken(
@@ -205,7 +222,7 @@ public class AuthController {
   }
 
   @PostMapping("/auth/register")
-  public ResponseEntity<User> register(@Valid @RequestBody RegisterRequest registerRequest)
+  public ResponseEntity<AuthenticationResponse> register(@Valid @RequestBody RegisterRequest registerRequest)
       throws IdInvalidException {
     boolean isEmailExist = this.userService.isEmailExist(registerRequest.getEmail());
     
@@ -216,13 +233,15 @@ public class AuthController {
 
     registerRequest.setRole(Role.USER);
 
-    String hashPassword = this.passwordEncoder.encode(registerRequest.getPassword());
-    registerRequest.setPassword(hashPassword);
+    AuthenticationResponse authResponse = this.userService.register(registerRequest);
 
-    User registerSuccess = this.userService.handleCreateUser(registerRequest);
+//    String hashPassword = this.passwordEncoder.encode(registerRequest.getPassword());
+//    registerRequest.setPassword(hashPassword);
+//
+//    User registerSuccess = this.userService.handleCreateUser(registerRequest);
 
     return ResponseEntity.status(HttpStatus.CREATED)
-        .body(registerSuccess);
+        .body(authResponse);
   }
 
   

@@ -34,6 +34,9 @@ public class User {
   @Enumerated(EnumType.STRING)
   private Role role;
 
+  @Column(name = "is_verify", nullable = false, columnDefinition = "BOOLEAN DEFAULT FALSE")
+  private boolean is_verify;
+
   @Column(columnDefinition = "MEDIUMTEXT")
   private String refreshToken;
 

@@ -1,11 +1,17 @@
 package com.example.HealthCare.service.impl;
 
+import com.example.HealthCare.Util.Const;
+import com.example.HealthCare.dto.SendMail.DataMailDTO;
 import com.example.HealthCare.model.User;
 import com.example.HealthCare.repository.UserRepository;
 import com.example.HealthCare.request.auth.RegisterRequest;
 import com.example.HealthCare.request.users.ChangePasswordRequest;
+import com.example.HealthCare.response.AuthenticationResponse;
+import com.example.HealthCare.response.UserResponse;
+import com.example.HealthCare.service.MailService;
 import com.example.HealthCare.service.UserService;
 
+import jakarta.mail.MessagingException;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -13,6 +19,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 @Builder
@@ -21,6 +29,7 @@ public class UserServiceImpl implements UserService {
 
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
+    private final MailService mailService;
 
     @Override
     public void changePassword(ChangePasswordRequest request, Principal connectedUser) {
@@ -78,5 +87,61 @@ public class UserServiceImpl implements UserService {
                 .build();
         return this.userRepository.save(user);
     }
+
+    @Override
+    public void verifyEmail(String email) {
+        var user = this.userRepository.findByEmail(email);
+
+        if (user == null) {
+            throw new IllegalStateException("User not found");
+        }
+        user.set_verify(true);
+        this.userRepository.save(user);
+    }
+
+    public AuthenticationResponse register(RegisterRequest request) {
+
+        if(this.userRepository.existsByEmail(request.getEmail())) {
+            throw new IllegalStateException("Email already exists");
+        }
+
+        var user = User.builder()
+                .firstname(request.getFirstname())
+                .lastname(request.getLastname())
+                .email(request.getEmail())
+                .password(passwordEncoder.encode(request.getPassword()))
+                .role(request.getRole())
+                .build();
+        var savedUser = this.userRepository.save(user);
+        // Gửi mail xác nhận
+        try {
+            DataMailDTO dataMail = new DataMailDTO();
+
+            dataMail.setTo(request.getEmail());
+            dataMail.setSubject(Const.SEND_MAIL_SUBJECT.CLIENT_REGISTER);
+
+            Map<String, Object> props = new HashMap<>();
+            props.put("name", request.getFirstname());
+            props.put("username", request.getEmail());
+            props.put("password", request.getPassword());
+            dataMail.setProps(props);
+
+            mailService.sendHTMLMail(dataMail, Const.TEMPLATE_FILE_NAME.CLIENT_REGISTER);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // Tạo đối tượng UserResponse để đưa vào phản hồi
+        UserResponse userResponse = UserResponse.builder()
+                .firstname(savedUser.getFirstname())
+                .lastname(savedUser.getLastname())
+                .email(savedUser.getEmail())
+                .build();
+
+        return AuthenticationResponse.builder()
+                .user(userResponse)
+                .build();
+    }
+
 
 }
