@@ -45,12 +45,12 @@ public class AllergyServiceImpl implements AllergyService {
     }
 
     @Override
-    public Page<Allergy> getAllAllergies(int page, int size, String keyword) {
+    public Page<Allergy> getAllAllergies(int page, int size, String keyword, Integer userID) {
         Pageable pageable = PageRequest.of(page - 1, size);
         if (keyword != null && !keyword.isEmpty()) {
-            return this.allergyRepository.findByKeyword(keyword, pageable);
+            return this.allergyRepository.findByKeyword(keyword, pageable, userID);
         }
-        return this.allergyRepository.findAll(pageable);
+        return this.allergyRepository.getAllergiesByUserID(userID, pageable);
     }
 
     @Override

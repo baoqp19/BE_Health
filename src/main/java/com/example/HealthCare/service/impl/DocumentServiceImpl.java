@@ -44,12 +44,12 @@ public class DocumentServiceImpl implements DocumentService {
     }
 
     @Override
-    public Page<Document> getAllDocuments(int page, int size, String keyword) {
+    public Page<Document> getAllDocuments(int page, int size, String keyword, Integer userID) {
         Pageable pageable = PageRequest.of(page - 1, size);
         if (keyword != null && !keyword.isEmpty()) {
-            return documentRepository.findByKeyword(keyword, pageable);
+            return this.documentRepository.findByKeyword(keyword, pageable, userID);
         }
-        return documentRepository.findAll(pageable);
+        return this.documentRepository.getAllBaseOnUserID(pageable,userID);
     }
 
     @Override

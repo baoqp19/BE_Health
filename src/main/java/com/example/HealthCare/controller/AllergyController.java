@@ -99,7 +99,11 @@ public class AllergyController {
             @RequestParam(defaultValue = "8") int size,
             @RequestParam(defaultValue = "") String keyword) {
 
-        Page<Allergy> alleriesPage = allergyService.getAllAllergies(page, size, keyword);
+        String email = SercurityUtil.getCurrentUserLogin().isPresent() ? SercurityUtil.getCurrentUserLogin().get() : "";
+
+        User user = this.userService.handleGetUserByEmail(email);
+
+        Page<Allergy> alleriesPage = allergyService.getAllAllergies(page,size,keyword, user.getId());
 
         List<Allergy> allergies = alleriesPage.getContent();
 

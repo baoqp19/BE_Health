@@ -68,13 +68,12 @@ public class DocumentController {
         return new ResponseEntity<>(updatedDocument, HttpStatus.OK);
     }
 
-
-
     @DeleteMapping("/documents/{id}")
     public ResponseEntity<String> deleteDocument(@PathVariable("id") Integer id) {
         this.documentService.deleteDocument(id);
         return ResponseEntity.ok().body("xóa thành công");
     }
+
     @GetMapping("/documents/{id}")
     public ResponseEntity<Optional<Document>> getDocumentById(@PathVariable("id") Integer id) {
         Optional<Document> document = documentService.findDocumentById(id);
@@ -86,8 +85,11 @@ public class DocumentController {
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "8") int size,
             @RequestParam(defaultValue = "") String keyword) {
-        Page<Document> documentsPage = this.documentService.getAllDocuments(page,size,keyword);
 
+        String email = SercurityUtil.getCurrentUserLogin().isPresent() ? SercurityUtil.getCurrentUserLogin().get() : "";
+        User user = this.userService.handleGetUserByEmail(email);
+
+        Page<Document> documentsPage = documentService.getAllDocuments(page,size,keyword,user.getId());
         List<Document> documents = documentsPage.getContent();
 
         return new ResponseEntity<>(documents, HttpStatus.OK);

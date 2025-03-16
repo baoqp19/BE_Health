@@ -15,12 +15,14 @@ public interface AllergyRepository extends JpaRepository<Allergy, Integer> {
     @Query("SELECT a FROM Allergy a WHERE " +
             "LOWER(a.allergyType) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
             "LOWER(a.severity) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
-            "LOWER(a.symptoms) LIKE LOWER(CONCAT('%', :keyword, '%'))")
-    // Page<Allergy> findByAllergyType(@Param("allergyType") String allergyType,
-    // Pageable pageable);
-    Page<Allergy> findByKeyword(@Param("keyword") String keyword, Pageable pageable);
+            "LOWER(a.symptoms) LIKE LOWER(CONCAT('%', :keyword, '%'))" +
+            "AND a.memberID in (SELECT m.memberID from Member m where m.userID = :userID)"
+    )
+    Page<Allergy> findByKeyword(@Param("keyword") String keyword, Pageable pageable,Integer userID);
 
-    // Tìm Allergy theo mức độ nghiêm trọng (severity)
-    // Page<Allergy> findBySeverity(@Param("severity") String severity,Pageable
-    // pageable);
+
+    @Query("SELECT a FROM Allergy a WHERE a.memberID in " +
+            "(SELECT m.memberID from Member m where m.userID = :userID)"
+    )
+    Page<Allergy> getAllergiesByUserID(@Param("userID") Integer userID, Pageable pageable);
 }
