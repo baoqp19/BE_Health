@@ -1,10 +1,7 @@
 package com.example.HealthCare.request.document;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Past;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.*;
 
 @Data
@@ -27,11 +24,11 @@ public class UpdateDocumentRequest {
     private String fileType;
 
     @NotBlank(message = "File content is required")
-    @Size(max = 500, message = "File content must not exceed 500 characters")
+    @Size(max = 1000, message = "File content must not exceed 1000 characters")
     private String fileContent;
 
     @NotNull(message = "Upload date is required")
-    @Past(message = "Upload date must be a date")
+    @PastOrPresent(message = "Upload date must be a date in the past or present")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private java.time.LocalDate uploadDate;
 }

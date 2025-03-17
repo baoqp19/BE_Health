@@ -33,13 +33,6 @@ public class MedicalRecordController {
     @PostMapping("/medical-records")
 
     public ResponseEntity<MedicalRecord> addMedicalRecord(@Valid @RequestBody AddMedicalRecordRequest addMedicalRecordRequest) {
-        String email = SercurityUtil.getCurrentUserLogin().isPresent() ? SercurityUtil.getCurrentUserLogin().get() : "";
-
-        User user = this.userService.handleGetUserByEmail(email);
-        if(user == null){
-            System.out.println("user is null");
-
-        }
 
         MedicalRecord medicalRecord = MedicalRecord.builder()
                 .memberID(addMedicalRecordRequest.getMemberID())

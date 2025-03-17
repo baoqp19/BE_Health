@@ -11,6 +11,11 @@ import com.example.HealthCare.model.Medication;
 
 @Repository
 public interface MedicationRepository extends JpaRepository<Medication, Integer> {
-    @Query("SELECT m FROM Medication m WHERE LOWER(m.name) LIKE LOWER(CONCAT('%', :keyword, '%'))")
-    Page<Medication> findByKeyword(@Param("keyword") String keyword, Pageable pageable);
+    @Query("SELECT m FROM Medication m WHERE LOWER(m.name) LIKE LOWER(CONCAT('%', :keyword, '%')) and m.recordID in"
+            + "(SELECT mr.recordID from MedicalRecord mr join Member m on mr.memberID = m.memberID where m.userID = :userID)")
+    Page<Medication> findByKeyword(@Param("keyword") String keyword, Pageable pageable,Integer userID);
+
+    @Query("SELECT m FROM Medication m where m.recordID in"
+            + "(SELECT mr.recordID from MedicalRecord mr join Member m on mr.memberID = m.memberID where m.userID = :userID)")
+    Page<Medication> getAllByUserID(Pageable pageable,@Param("userID") Integer userID);
 }

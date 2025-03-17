@@ -2,6 +2,9 @@ package com.example.HealthCare.controller;
 
 import java.util.List;
 
+import com.example.HealthCare.Util.SercurityUtil;
+import com.example.HealthCare.model.User;
+import com.example.HealthCare.service.UserService;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,9 +32,11 @@ import lombok.extern.slf4j.Slf4j;
 public class MedicationController {
 
     private final MedicationService medicationService;
+    private final UserService userService;
 
-    public MedicationController(MedicationService medicationService) {
+    public MedicationController(MedicationService medicationService, UserService userService) {
         this.medicationService = medicationService;
+        this.userService = userService;
     }
 
     @PostMapping("/medications")
@@ -86,7 +91,12 @@ public class MedicationController {
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "8") int size,
             @RequestParam(defaultValue = "") String keyword) {
-        Page<Medication> medicationsPage = this.medicationService.getAllMedications(page, size, keyword);
+
+        String email = SercurityUtil.getCurrentUserLogin().isPresent() ? SercurityUtil.getCurrentUserLogin().get() : "";
+
+        User user = this.userService.handleGetUserByEmail(email);
+
+        Page<Medication> medicationsPage = this.medicationService.getAllMedications(page, size, keyword, user.getId());
 
         List<Medication> medicationsContent = medicationsPage.getContent();
 

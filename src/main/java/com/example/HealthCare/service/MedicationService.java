@@ -16,5 +16,5 @@ public interface MedicationService {
 
     Medication getMedicationById(Integer medicationID);
 
-    Page<Medication> getAllMedications(int page, int size, String keyword);
+    Page<Medication> getAllMedications(int page, int size, String keyword, Integer userID);
 }

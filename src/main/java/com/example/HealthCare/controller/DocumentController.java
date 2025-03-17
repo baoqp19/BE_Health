@@ -89,7 +89,7 @@ public class DocumentController {
         String email = SercurityUtil.getCurrentUserLogin().isPresent() ? SercurityUtil.getCurrentUserLogin().get() : "";
         User user = this.userService.handleGetUserByEmail(email);
 
-        Page<Document> documentsPage = documentService.getAllDocuments(page,size,keyword,user.getId());
+        Page<Document> documentsPage = this.documentService.getAllDocuments(page,size,keyword,user.getId());
         List<Document> documents = documentsPage.getContent();
 
         return new ResponseEntity<>(documents, HttpStatus.OK);

@@ -3,6 +3,9 @@ package com.example.HealthCare.controller;
 import java.util.List;
 import java.util.Optional;
 
+import com.example.HealthCare.model.Member;
+import com.example.HealthCare.repository.AllergyRepository;
+import com.example.HealthCare.repository.MemberRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,10 +36,12 @@ import lombok.extern.slf4j.Slf4j;
 public class AllergyController {
     private final AllergyService allergyService;
     private final UserService userService;
+    private final MemberRepository memberRepository;
 
-    public AllergyController(AllergyService allergyService, UserService userService) {
+    public AllergyController(AllergyService allergyService, UserService userService, MemberRepository memberRepository) {
         this.allergyService = allergyService;
         this.userService = userService;
+        this.memberRepository = memberRepository;
     }
 
     @PostMapping("/allergies")
@@ -44,10 +49,13 @@ public class AllergyController {
 
         String email = SercurityUtil.getCurrentUserLogin().isPresent() ? SercurityUtil.getCurrentUserLogin().get() : "";
 
+
         User user = this.userService.handleGetUserByEmail(email);
+        Member member = this.memberRepository.findById(addAllergyRequest.getMemberID())
+                .orElseThrow(() -> new RuntimeException("Member Not Found"));
 
         Allergy allergy = Allergy.builder()
-                .memberID(addAllergyRequest.getMemberID())
+                .memberID(member.getMemberID())
                 .allergyType(addAllergyRequest.getAllergyType())
                 .severity(addAllergyRequest.getSeverity())
                 .symptoms(addAllergyRequest.getSymptoms())
@@ -65,10 +73,12 @@ public class AllergyController {
 
             @PathVariable("id") Integer id,
             @Valid @RequestBody UpdateAllergyRequest updateAllergyRequest) {
+        Member member = this.memberRepository.findById(updateAllergyRequest.getMemberID())
+                .orElseThrow(() -> new RuntimeException("Member Not Found"));
 
         Allergy allergy = Allergy.builder()
                 .allergyID(id)
-                .memberID(updateAllergyRequest.getMemberID())
+                .memberID(member.getMemberID())
                 .allergyType(updateAllergyRequest.getAllergyType())
                 .severity(updateAllergyRequest.getSeverity())
                 .symptoms(updateAllergyRequest.getSymptoms())

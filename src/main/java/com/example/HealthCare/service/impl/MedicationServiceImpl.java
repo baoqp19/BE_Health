@@ -48,12 +48,11 @@ public class MedicationServiceImpl implements MedicationService {
     }
 
     @Override
-    public Page<Medication> getAllMedications(int page, int size, String keyword) {
+    public Page<Medication> getAllMedications(int page, int size, String keyword, Integer userID) {
         Pageable pageable = PageRequest.of(page - 1, size);
         if (keyword != null && !keyword.isEmpty()) {
-            return medicationRepository.findByKeyword(keyword, pageable);
+            return this.medicationRepository.findByKeyword(keyword, pageable, userID);
         }
-        return medicationRepository.findAll(pageable);
+        return this.medicationRepository.getAllByUserID(pageable, userID);
     }
-
 }
