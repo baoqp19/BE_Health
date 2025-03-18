@@ -84,7 +84,7 @@ public class MemberController {
     }
 
     @GetMapping("/members/{id}")
-    public ResponseEntity<?> getMemberById(@PathVariable("id") Integer id) {
+    public ResponseEntity<Member> getMemberById(@PathVariable("id") Integer id) {
         Member member = memberService.getMemberById(id);
         return new ResponseEntity<>(member, HttpStatus.OK);
     }
