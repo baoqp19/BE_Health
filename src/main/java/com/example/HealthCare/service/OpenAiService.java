@@ -16,7 +16,7 @@ import java.io.IOException;
 @Slf4j
 public class OpenAiService {
 
-    private final RestTemplate restTemplate;
+    private final RestTemplate restTemplate; // giúp gửi request and nhận response
 
     @Value("${openai.api.url}")
     private String url;
@@ -35,7 +35,7 @@ public class OpenAiService {
                 "]}";
 
         HttpEntity<String> entity = new HttpEntity<>(requestBody, headers);
-
+        log.info(entity.toString());
         ResponseEntity<String> response = restTemplate.exchange(
                 urlText,
                 HttpMethod.POST,
@@ -45,9 +45,8 @@ public class OpenAiService {
 
         if (response.getStatusCode().is2xxSuccessful()) {
             log.info("Successfully called the OpenAI API");
-            String anwser = extractTextFromResponse(response.getBody());
-            log.info(anwser);
-            return anwser;
+            log.info(response.getBody());
+            return extractTextFromResponse(response.getBody());
         } else {
             log.error("Failed to call the OpenAI API: {}", response.getStatusCode());
             return null;
