@@ -57,6 +57,7 @@ public class AppointmentController {
         Appointment updatedAppointment = appointmentService.updateAppointment(appointment);
         return new ResponseEntity<>(updatedAppointment, HttpStatus.OK);
     }
+
     @DeleteMapping("/appointments/{id}")
     public ResponseEntity<String> deleteAppointment(@PathVariable("id") Integer id) {
         appointmentService.deleteAppointment(id);

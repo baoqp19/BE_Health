@@ -1,7 +1,9 @@
 package com.example.HealthCare.controller;
 
+import com.example.HealthCare.response.ApiResponse;
 import com.example.HealthCare.service.OpenAiService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,10 +17,12 @@ public class OpenAiController {
     private final OpenAiService openAiService;
 
     @PostMapping("/ask")
-    public ResponseEntity<String> askQuestion(@RequestBody Map<String, String> request) {
+    public ResponseEntity<ApiResponse<String>> askQuestion(@RequestBody Map<String, String> request) {
         String question = request.get("question");
-        String response = openAiService.askQuestion(question);
-        return ResponseEntity.ok(response);
+        String text = openAiService.askQuestion(question);
+        String response = (text == null) ? "Error when calling the OpenAI API" : text;
+
+        return ResponseEntity.ok(new ApiResponse<>(200, "Success", text));
     }
 
 }

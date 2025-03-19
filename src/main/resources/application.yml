@@ -41,4 +41,4 @@ application:
 openai:
   api:
     key: ${OPENAI-KEY}
-    url: https://api.openai.com/v1/chat/completions
+    url: https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent
