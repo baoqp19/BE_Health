@@ -9,6 +9,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface MemberRepository extends JpaRepository<Member, Integer> {
 
@@ -16,4 +18,6 @@ public interface MemberRepository extends JpaRepository<Member, Integer> {
     Page<Member> findByKeyword(@Param("keyword") String keyword, Pageable pageable, Integer userID);
 
     Page<Member> findAllByUserID(Pageable pageable, @Param("userID") Integer userID);
+
+    List<Member> findAllByUserID(@Param("userID") Integer userID);
 }

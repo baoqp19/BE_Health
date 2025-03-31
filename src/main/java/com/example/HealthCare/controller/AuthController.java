@@ -4,11 +4,10 @@ import com.example.HealthCare.Util.SercurityUtil;
 import com.example.HealthCare.enums.Role;
 import com.example.HealthCare.exception.defineException.IdInvalidException;
 import com.example.HealthCare.model.User;
-import com.example.HealthCare.request.auth.LoginRequest;
-import com.example.HealthCare.request.auth.RegisterRequest;
-import com.example.HealthCare.request.auth.ResTokenLogin;
+import com.example.HealthCare.request.auth.*;
 import com.example.HealthCare.response.ApiResponse;
 import com.example.HealthCare.response.AuthenticationResponse;
+import com.example.HealthCare.service.ForgotPasswordService;
 import com.example.HealthCare.service.UserService;
 
 import jakarta.validation.Valid;
@@ -38,7 +37,7 @@ public class AuthController {
   private final AuthenticationManagerBuilder authenticationManagerBuilder;
   private final SercurityUtil sercurityUtil;
   private final UserService userService;
-
+  private final ForgotPasswordService forgotPasswordService;
   private final PasswordEncoder passwordEncoder;
 
 
@@ -46,11 +45,13 @@ public class AuthController {
       AuthenticationManagerBuilder authenticationManagerBuilder,
       SercurityUtil sercurityUtil,
       UserService userService,
-      PasswordEncoder passwordEncoder) {
+      PasswordEncoder passwordEncoder,
+      ForgotPasswordService forgotPasswordService) {
     this.authenticationManagerBuilder = authenticationManagerBuilder;
     this.sercurityUtil = sercurityUtil;
     this.userService = userService;
     this.passwordEncoder = passwordEncoder;
+    this.forgotPasswordService = forgotPasswordService;
   }
 
 
@@ -245,5 +246,22 @@ public class AuthController {
         .body(authResponse);
   }
 
-  
+  @PostMapping("/forgot-password")
+  public ResponseEntity<ApiResponse<String>> sendOTP(@Valid @RequestBody OTPRequest request) {
+    String result = forgotPasswordService.sendOTP(request.getEmail());
+
+    return ResponseEntity.ok(new ApiResponse<>(200, "Success", result));
+  }
+
+  @PostMapping("/otp")
+  public ResponseEntity<ApiResponse<String>> sendNewPassword(@Valid @RequestBody NewPasswordRequest request) {
+    String result = forgotPasswordService.sendNewPassword(request.getEmail(), request.getOtp());
+
+    if (result == null) {
+      return ResponseEntity.ok(new ApiResponse<>(400, "Error", null));
+    }
+    return ResponseEntity.ok(new ApiResponse<>(200, "Success", result));
+  }
+
+
 }

@@ -76,5 +76,9 @@ public class MemberServiceImpl implements MemberService {
         return rs;
 
     }
+    @Override
+    public List<Member> getAllMembersByUserID(Integer userID) {
+        return memberRepository.findAllByUserID(userID);
+    }
 
 }

@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 @Builder
@@ -54,16 +55,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User handleGetUserByEmail(String username) {
-        return this.userRepository.findByEmail(username);
+        return this.userRepository.findByEmail(username).orElseThrow(() -> new IllegalStateException("User not found"));
     }
 
     @Override
     public void updateUserToken(String token, String email) {
         User currentUser = this.handleGetUserByEmail(email);
-        if (currentUser != null) {
-            currentUser.setRefreshToken(token);
-            this.userRepository.save(currentUser);
-        }
+
+        currentUser.setRefreshToken(token);
+        this.userRepository.save(currentUser);
     }
 
     @Override
@@ -90,11 +90,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void verifyEmail(String email) {
-        var user = this.userRepository.findByEmail(email);
+        var user = this.userRepository.findByEmail(email).orElseThrow(() -> new IllegalStateException("User not found"));
 
-        if (user == null) {
-            throw new IllegalStateException("User not found");
-        }
         user.set_verify(true);
         this.userRepository.save(user);
     }

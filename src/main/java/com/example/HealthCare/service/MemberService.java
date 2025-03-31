@@ -21,4 +21,5 @@ public interface MemberService {
 
     public ResultPaginationDTO getAllMember(Pageable pageable);
 
+    List<Member> getAllMembersByUserID(Integer userID);
 }

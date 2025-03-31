@@ -28,10 +28,10 @@ public class Document {
     @Column(name = "file_type",nullable = false)
     private String fileType;
 
-    @Column(name = "file_content")
-    private String fileContent;
-
     @Column(name = "upload_date")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate uploadDate;
+
+    @Transient  // Không lưu thuộc tính này vào cơ sở dữ liệu
+    private String path;
 }
