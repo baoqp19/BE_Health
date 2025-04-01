@@ -28,3 +28,8 @@ openai:
   api:
     key: ${OPENAI-KEY}
     url: https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent
+
+  jackson:
+    serialization:
+      WRITE_DATES_AS_TIMESTAMPS=false: false
+

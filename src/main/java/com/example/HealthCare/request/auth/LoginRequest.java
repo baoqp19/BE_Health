@@ -9,6 +9,8 @@ import lombok.*;
 @Builder
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class LoginRequest {
 
   @NotBlank(message = "email không được để trổng")
@@ -16,5 +18,5 @@ public class LoginRequest {
   private String email;
 
   @NotBlank(message = "password không được để trống")
-  String password;
+  private String password;
 }
