@@ -4,14 +4,13 @@ import com.example.HealthCare.Util.Const;
 import com.example.HealthCare.dto.SendMail.DataMailDTO;
 import com.example.HealthCare.model.User;
 import com.example.HealthCare.repository.UserRepository;
-import com.example.HealthCare.request.auth.RegisterRequest;
-import com.example.HealthCare.request.users.ChangePasswordRequest;
-import com.example.HealthCare.response.AuthenticationResponse;
-import com.example.HealthCare.response.UserResponse;
+import com.example.HealthCare.dto.request.auth.RegisterRequest;
+import com.example.HealthCare.dto.request.users.ChangePasswordRequest;
+import com.example.HealthCare.dto.response.AuthenticationResponse;
+import com.example.HealthCare.dto.response.UserResponse;
 import com.example.HealthCare.service.MailService;
 import com.example.HealthCare.service.UserService;
 
-import jakarta.mail.MessagingException;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -21,7 +20,6 @@ import org.springframework.stereotype.Service;
 import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 @Service
 @Builder

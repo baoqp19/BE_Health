@@ -19,8 +19,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.HealthCare.model.Medication;
-import com.example.HealthCare.request.medication.AddMedicationRequest;
-import com.example.HealthCare.request.medication.UpdateMedicationRequest;
+import com.example.HealthCare.dto.request.medication.AddMedicationRequest;
+import com.example.HealthCare.dto.request.medication.UpdateMedicationRequest;
 import com.example.HealthCare.service.MedicationService;
 
 import jakarta.validation.Valid;

@@ -1,9 +1,8 @@
 package com.example.HealthCare.controller;
 
-import com.example.HealthCare.response.ApiResponse;
+import com.example.HealthCare.dto.response.ApiResponse;
 import com.example.HealthCare.service.OpenAiService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

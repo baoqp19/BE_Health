@@ -1,6 +1,6 @@
 package com.example.HealthCare.controller;
 
-import com.example.HealthCare.request.users.ChangePasswordRequest;
+import com.example.HealthCare.dto.request.users.ChangePasswordRequest;
 import com.example.HealthCare.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

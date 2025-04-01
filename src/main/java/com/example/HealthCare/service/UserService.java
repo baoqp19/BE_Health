@@ -1,9 +1,9 @@
 package com.example.HealthCare.service;
 
 import com.example.HealthCare.model.User;
-import com.example.HealthCare.request.auth.RegisterRequest;
-import com.example.HealthCare.request.users.ChangePasswordRequest;
-import com.example.HealthCare.response.AuthenticationResponse;
+import com.example.HealthCare.dto.request.auth.RegisterRequest;
+import com.example.HealthCare.dto.request.users.ChangePasswordRequest;
+import com.example.HealthCare.dto.response.AuthenticationResponse;
 
 import java.security.Principal;
 

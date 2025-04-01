@@ -3,8 +3,8 @@ package com.example.HealthCare.controller;
 import com.example.HealthCare.Util.SercurityUtil;
 import com.example.HealthCare.model.Member;
 import com.example.HealthCare.model.User;
-import com.example.HealthCare.request.member.AddMemberRequest;
-import com.example.HealthCare.request.member.UpdateMemberRequest;
+import com.example.HealthCare.dto.request.member.AddMemberRequest;
+import com.example.HealthCare.dto.request.member.UpdateMemberRequest;
 import com.example.HealthCare.service.MemberService;
 import com.example.HealthCare.service.UserService;
 

@@ -2,8 +2,8 @@ package com.example.HealthCare.controller;
 
 import com.example.HealthCare.model.Appointment;
 import com.example.HealthCare.model.Member;
-import com.example.HealthCare.request.appointment.AddAppointmentRequest;
-import com.example.HealthCare.request.appointment.UpdateAppointmentRequest;
+import com.example.HealthCare.dto.request.appointment.AddAppointmentRequest;
+import com.example.HealthCare.dto.request.appointment.UpdateAppointmentRequest;
 import com.example.HealthCare.service.AppointmentService;
 import com.example.HealthCare.service.MemberService;
 import com.example.HealthCare.service.UserService;

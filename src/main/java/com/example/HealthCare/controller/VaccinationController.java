@@ -2,8 +2,8 @@ package com.example.HealthCare.controller;
 
 import com.example.HealthCare.model.Member;
 import com.example.HealthCare.model.Vaccination;
-import com.example.HealthCare.request.vaccication.AddVaccinationRequest;
-import com.example.HealthCare.request.vaccication.UpdateVaccinationRequest;
+import com.example.HealthCare.dto.request.vaccication.AddVaccinationRequest;
+import com.example.HealthCare.dto.request.vaccication.UpdateVaccinationRequest;
 import com.example.HealthCare.service.MemberService;
 import com.example.HealthCare.service.VaccinationService;
 import jakarta.validation.Valid;

@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 
 import com.example.HealthCare.model.Member;
-import com.example.HealthCare.repository.AllergyRepository;
 import com.example.HealthCare.repository.MemberRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -22,8 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.HealthCare.Util.SercurityUtil;
 import com.example.HealthCare.model.Allergy;
 import com.example.HealthCare.model.User;
-import com.example.HealthCare.request.allergy.AddAllergyRequest;
-import com.example.HealthCare.request.allergy.UpdateAllergyRequest;
+import com.example.HealthCare.dto.request.allergy.AddAllergyRequest;
+import com.example.HealthCare.dto.request.allergy.UpdateAllergyRequest;
 import com.example.HealthCare.service.AllergyService;
 import com.example.HealthCare.service.UserService;
 

@@ -7,7 +7,7 @@ import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import com.example.HealthCare.exception.defineException.IdInvalidException;
-import com.example.HealthCare.response.RestResponse;
+import com.example.HealthCare.dto.response.RestResponse;
 
 import java.nio.file.AccessDeniedException;
 import java.util.HashMap;

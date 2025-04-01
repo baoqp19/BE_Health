@@ -1,12 +1,12 @@
 package com.example.HealthCare.controller;
 
 import com.example.HealthCare.Util.SercurityUtil;
+import com.example.HealthCare.dto.request.auth.*;
 import com.example.HealthCare.enums.Role;
 import com.example.HealthCare.exception.defineException.IdInvalidException;
 import com.example.HealthCare.model.User;
-import com.example.HealthCare.request.auth.*;
-import com.example.HealthCare.response.ApiResponse;
-import com.example.HealthCare.response.AuthenticationResponse;
+import com.example.HealthCare.dto.response.ApiResponse;
+import com.example.HealthCare.dto.response.AuthenticationResponse;
 import com.example.HealthCare.service.ForgotPasswordService;
 import com.example.HealthCare.service.UserService;
 
