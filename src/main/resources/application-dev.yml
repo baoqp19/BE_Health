@@ -33,3 +33,18 @@ openai:
     serialization:
       WRITE_DATES_AS_TIMESTAMPS=false: false
 
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id:  ${CLIENT_ID}
+            client-secret: ${CLIENT_SECRET}
+            redirect-uri: "${GOOGLE_REDIRECT_URI:http://localhost:3001/api/oauth2/google/callback}"
+            scope: openid, profile, email
+
+  #SETUP spring logging
+logging:
+  level:
+    org.springframework: INFO
+    com.hgbaodev.backend: INFO

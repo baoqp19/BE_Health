@@ -13,4 +13,5 @@ public class Const {
         public final static String CLIENT_FORGOT_PASSWORD_OTP = "otp-mail-template";
         public final static String CLIENT_FORGOT_PASSWORD_NEW_PASSWORD = "new-password-mail-template";
     }
+
 }
