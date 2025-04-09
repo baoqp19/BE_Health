@@ -1,6 +1,6 @@
 package com.example.HealthCare.config;
 
-import org.apache.catalina.security.SecurityUtil;
+import com.example.HealthCare.Util.SecurityUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,7 +22,6 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
 
-import com.example.HealthCare.Util.SercurityUtil;
 import com.nimbusds.jose.jwk.source.ImmutableSecret;
 import com.nimbusds.jose.util.Base64;
 
@@ -110,14 +109,14 @@ public class SecurityConfiguration {
 	private SecretKey getSecretKey() {
 		byte[] keyBytes = Base64.from(jwtKey).decode();
 		return new SecretKeySpec(keyBytes, 0, keyBytes.length,
-				SercurityUtil.JW_ALGORITHM.getName());
+				SecurityUtil.JW_ALGORITHM.getName());
 	}
 
 	// dùng để giải mã token  
 	@Bean
 	public JwtDecoder jwtDecoder() {
 		NimbusJwtDecoder jwtDecoder = NimbusJwtDecoder.withSecretKey(
-				getSecretKey()).macAlgorithm(SercurityUtil.JW_ALGORITHM).build();
+				getSecretKey()).macAlgorithm(SecurityUtil.JW_ALGORITHM).build();
 		return token -> {
 			try {
 				return jwtDecoder.decode(token);
@@ -130,7 +129,7 @@ public class SecurityConfiguration {
 
 	public Jwt checkValidRefreshToken(String token) {
 		NimbusJwtDecoder jwtDecoder = NimbusJwtDecoder.withSecretKey(
-				getSecretKey()).macAlgorithm(SercurityUtil.JW_ALGORITHM).build();
+				getSecretKey()).macAlgorithm(SecurityUtil.JW_ALGORITHM).build();
 		try {
 			return jwtDecoder.decode(token);
 		} catch (Exception e) {

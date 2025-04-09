@@ -1,7 +1,7 @@
 package com.example.HealthCare.controller;
 
 
-import com.example.HealthCare.Util.SercurityUtil;
+import com.example.HealthCare.Util.SecurityUtil;
 import com.example.HealthCare.model.EmergencyContact;
 import com.example.HealthCare.model.User;
 import com.example.HealthCare.dto.request.emergencyContact.AddEmergencyContactRequest;
@@ -34,8 +34,8 @@ public class EmergencyContactController {
     @PostMapping("/emergencyContacts")
     public ResponseEntity<EmergencyContact> addEmeregencyContact(@Valid @RequestBody AddEmergencyContactRequest addEmergencyContactRequest){
 
-        String email = SercurityUtil.getCurrentUserLogin().isPresent()
-                ? SercurityUtil.getCurrentUserLogin().get()
+        String email = SecurityUtil.getCurrentUserLogin().isPresent()
+                ? SecurityUtil.getCurrentUserLogin().get()
                 : "";
 
         User user = this.userService.handleGetUserByEmail(email);

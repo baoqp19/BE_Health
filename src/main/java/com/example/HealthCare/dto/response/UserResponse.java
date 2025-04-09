@@ -12,11 +12,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UserResponse {
 
-    private String firstname;
-
-    private String lastname;
+    Integer id;
+    String firstname;
+    String lastname;
 
     @JsonProperty("email")
-    private String email;
+    String email;
+
+    Boolean is_verify;
+    Boolean is_block;
 
 }

@@ -1,7 +1,7 @@
 package com.example.HealthCare.controller;
 
 
-import com.example.HealthCare.Util.SercurityUtil;
+import com.example.HealthCare.Util.SecurityUtil;
 import com.example.HealthCare.model.Document;
 import com.example.HealthCare.model.MedicalRecord;
 import com.example.HealthCare.model.User;
@@ -78,7 +78,7 @@ public class DocumentController {
     public ResponseEntity<?> addDocument(@Validated @RequestParam("file") MultipartFile file,
                                                  @RequestParam("request") @Valid String json) {
 
-        String email = SercurityUtil.getCurrentUserLogin().isPresent() ? SercurityUtil.getCurrentUserLogin().get() : "";
+        String email = SecurityUtil.getCurrentUserLogin().isPresent() ? SecurityUtil.getCurrentUserLogin().get() : "";
         User user = this.userService.handleGetUserByEmail(email);
 
         try {
@@ -120,7 +120,7 @@ public class DocumentController {
             @RequestPart("file") MultipartFile file,
             @RequestPart("request") @Valid String json){
         try {
-            String email = SercurityUtil.getCurrentUserLogin().isPresent() ? SercurityUtil.getCurrentUserLogin().get() : "";
+            String email = SecurityUtil.getCurrentUserLogin().isPresent() ? SecurityUtil.getCurrentUserLogin().get() : "";
 
             User user = this.userService.handleGetUserByEmail(email);
 
@@ -162,7 +162,7 @@ public class DocumentController {
     @GetMapping("/documents/{id}")
     public ResponseEntity<?> getDocumentById(@PathVariable("id") Integer id) {
         Optional<Document> documentOptional = documentService.findDocumentById(id);
-        String email = SercurityUtil.getCurrentUserLogin().isPresent() ? SercurityUtil.getCurrentUserLogin().get() : "";
+        String email = SecurityUtil.getCurrentUserLogin().isPresent() ? SecurityUtil.getCurrentUserLogin().get() : "";
 
         User user = this.userService.handleGetUserByEmail(email);
 
@@ -185,7 +185,7 @@ public class DocumentController {
             @RequestParam(defaultValue = "8") int size,
             @RequestParam(defaultValue = "") String keyword) {
 
-        String email = SercurityUtil.getCurrentUserLogin().isPresent() ? SercurityUtil.getCurrentUserLogin().get() : "";
+        String email = SecurityUtil.getCurrentUserLogin().isPresent() ? SecurityUtil.getCurrentUserLogin().get() : "";
         User user = this.userService.handleGetUserByEmail(email);
 
         Page<Document> documentsPage = this.documentService.getAllDocuments(page,size,keyword,user.getId());

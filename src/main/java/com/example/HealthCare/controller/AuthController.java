@@ -1,6 +1,6 @@
 package com.example.HealthCare.controller;
 
-import com.example.HealthCare.Util.SercurityUtil;
+import com.example.HealthCare.Util.SecurityUtil;
 import com.example.HealthCare.dto.request.auth.*;
 import com.example.HealthCare.enums.Role;
 import com.example.HealthCare.exception.defineException.IdInvalidException;
@@ -35,7 +35,7 @@ public class AuthController {
   private long refreshTokenExpiration;
 
   private final AuthenticationManagerBuilder authenticationManagerBuilder;
-  private final SercurityUtil sercurityUtil;
+  private final SecurityUtil securityUtil;
   private final UserService userService;
   private final ForgotPasswordService forgotPasswordService;
   private final PasswordEncoder passwordEncoder;
@@ -43,12 +43,12 @@ public class AuthController {
 
   public AuthController(
       AuthenticationManagerBuilder authenticationManagerBuilder,
-      SercurityUtil sercurityUtil,
+      SecurityUtil securityUtil,
       UserService userService,
       PasswordEncoder passwordEncoder,
       ForgotPasswordService forgotPasswordService) {
     this.authenticationManagerBuilder = authenticationManagerBuilder;
-    this.sercurityUtil = sercurityUtil;
+    this.securityUtil = securityUtil;
     this.userService = userService;
     this.passwordEncoder = passwordEncoder;
     this.forgotPasswordService = forgotPasswordService;
@@ -79,11 +79,11 @@ public class AuthController {
           currentUserDB.getLastname());
       res.setUser(userLogin);
     }
-    String access_token = this.sercurityUtil.createAccessToken(authenticateAction.getName(), res);
+    String access_token = this.securityUtil.createAccessToken(authenticateAction.getName(), res);
 
     res.setAccessToken(access_token);
 
-    String refresh_token = this.sercurityUtil.createRefreshToken(loginRequest.getEmail(), res);
+    String refresh_token = this.securityUtil.createRefreshToken(loginRequest.getEmail(), res);
 
     // update user
     this.userService.updateUserToken(refresh_token, loginRequest.getEmail());
@@ -107,8 +107,8 @@ public class AuthController {
   @GetMapping("/auth/account")
   public ResponseEntity<ResTokenLogin.UserLogin> getAccount() {
 
-    String email = SercurityUtil.getCurrentUserLogin().isPresent()
-        ? SercurityUtil.getCurrentUserLogin().get()
+    String email = SecurityUtil.getCurrentUserLogin().isPresent()
+        ? SecurityUtil.getCurrentUserLogin().get()
         : "";
 
     User currentUserDB = this.userService.handleGetUserByEmail(email);
@@ -149,7 +149,7 @@ public class AuthController {
     if (refresh_token == null) {
       throw new IdInvalidException("Refresh Token bị trống ");
     }
-    Jwt decodedToken = this.sercurityUtil.checkValidRefreshToken(refresh_token);
+    Jwt decodedToken = this.securityUtil.checkValidRefreshToken(refresh_token);
 
     if (decodedToken == null) {
       throw new IdInvalidException("Refresh Token không hợp lệ");
@@ -171,12 +171,11 @@ public class AuthController {
       res.setUser(userLogin);
     }
 
-    String access_token = this.sercurityUtil.createAccessToken(email, res);
+    String access_token = this.securityUtil.createAccessToken(email, res);
     res.setAccessToken(access_token);
 
     // create refresh token
-    String new_refresh_token = this.sercurityUtil.createRefreshToken(email, res);
-
+    String new_refresh_token = this.securityUtil.createRefreshToken(email, res);
     // update user
     this.userService.updateUserToken(new_refresh_token, email);
 
@@ -198,8 +197,8 @@ public class AuthController {
   @PostMapping("/auth/logout")
   public ResponseEntity<Void> logout() throws IdInvalidException {
 
-    String email = SercurityUtil.getCurrentUserLogin().isPresent()
-        ? SercurityUtil.getCurrentUserLogin().get()
+    String email = SecurityUtil.getCurrentUserLogin().isPresent()
+        ? SecurityUtil.getCurrentUserLogin().get()
         : "";
 
     if (email.equals("")) {

@@ -2,7 +2,7 @@ package com.example.HealthCare.controller;
 
 import java.util.List;
 
-import com.example.HealthCare.Util.SercurityUtil;
+import com.example.HealthCare.Util.SecurityUtil;
 import com.example.HealthCare.model.User;
 import com.example.HealthCare.service.UserService;
 import org.springframework.data.domain.Page;
@@ -92,7 +92,7 @@ public class MedicationController {
             @RequestParam(defaultValue = "8") int size,
             @RequestParam(defaultValue = "") String keyword) {
 
-        String email = SercurityUtil.getCurrentUserLogin().isPresent() ? SercurityUtil.getCurrentUserLogin().get() : "";
+        String email = SecurityUtil.getCurrentUserLogin().isPresent() ? SecurityUtil.getCurrentUserLogin().get() : "";
 
         User user = this.userService.handleGetUserByEmail(email);
 

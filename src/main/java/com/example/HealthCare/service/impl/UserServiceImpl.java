@@ -2,6 +2,7 @@ package com.example.HealthCare.service.impl;
 
 import com.example.HealthCare.Util.Const;
 import com.example.HealthCare.dto.SendMail.DataMailDTO;
+import com.example.HealthCare.mapper.UserMapper;
 import com.example.HealthCare.model.User;
 import com.example.HealthCare.repository.UserRepository;
 import com.example.HealthCare.dto.request.auth.RegisterRequest;
@@ -13,6 +14,10 @@ import com.example.HealthCare.service.UserService;
 
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -23,12 +28,20 @@ import java.util.Map;
 
 @Service
 @Builder
-@RequiredArgsConstructor
+@Slf4j
 public class UserServiceImpl implements UserService {
 
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final MailService mailService;
+    private final UserMapper userMapper;
+
+    public UserServiceImpl(PasswordEncoder passwordEncoder, UserRepository userRepository, MailService mailService, UserMapper userMapper) {
+        this.passwordEncoder = passwordEncoder;
+        this.userRepository = userRepository;
+        this.mailService = mailService;
+        this.userMapper = userMapper;
+    }
 
     @Override
     public void changePassword(ChangePasswordRequest request, Principal connectedUser) {
@@ -138,5 +151,25 @@ public class UserServiceImpl implements UserService {
                 .build();
     }
 
+
+    @Override
+    public Page<UserResponse> getAllUsers(int page, int size, String keyword) {
+        Pageable pageable = PageRequest.of(page - 1, size);
+        if (keyword != null && !keyword.isEmpty()) {
+             Page<UserResponse> userResponse = userMapper.toUsersResponse(userRepository.findByKeyword(keyword, pageable));
+             log.info(userResponse.toString());
+             return userResponse;
+
+        }
+        return userMapper.toUsersResponse(userRepository.findAll(pageable));
+    }
+
+    @Override
+    public UserResponse updateBlockStateUser(Integer id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("User is not found!!!"));
+        user.set_block(!user.is_block());
+        return userMapper.toUserResponse(userRepository.save(user));
+    }
 
 }

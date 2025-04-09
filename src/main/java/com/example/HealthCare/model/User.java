@@ -31,6 +31,9 @@ public class User {
   private String email;
   private String password;
 
+  @Column(name = "is_block", nullable = false, columnDefinition = "BOOLEAN DEFAULT FALSE")
+  private boolean is_block;
+
   @Enumerated(EnumType.STRING)
   private Role role;
 

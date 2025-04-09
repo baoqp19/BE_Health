@@ -7,7 +7,9 @@ import org.springframework.data.domain.Page;
 
 import java.util.List;
 
+@Data
 public class CustomPagination<T> {
+
     List<T> items;
     CustomPageMeta meta;
 

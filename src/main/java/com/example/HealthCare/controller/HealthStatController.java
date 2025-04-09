@@ -1,6 +1,6 @@
 package com.example.HealthCare.controller;
 
-import com.example.HealthCare.Util.SercurityUtil;
+import com.example.HealthCare.Util.SecurityUtil;
 import com.example.HealthCare.model.HealthStat;
 import com.example.HealthCare.model.Member;
 import com.example.HealthCare.model.User;
@@ -95,7 +95,7 @@ public class HealthStatController {
 
     @GetMapping("/health-stats/membersSelect")
     public ResponseEntity<List<Member>> getAllMembers() {
-      String email = SercurityUtil.getCurrentUserLogin().isPresent() ? SercurityUtil.getCurrentUserLogin().get() : null;
+      String email = SecurityUtil.getCurrentUserLogin().isPresent() ? SecurityUtil.getCurrentUserLogin().get() : null;
         User user = this.userService.handleGetUserByEmail(email);
 
         List<Member> membersList = memberService.getAllMembersByUserID(user.getId());

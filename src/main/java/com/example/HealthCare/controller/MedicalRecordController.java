@@ -1,7 +1,7 @@
 package com.example.HealthCare.controller;
 
 
-import com.example.HealthCare.Util.SercurityUtil;
+import com.example.HealthCare.Util.SecurityUtil;
 import com.example.HealthCare.model.MedicalRecord;
 import com.example.HealthCare.model.User;
 import com.example.HealthCare.dto.request.medicalRecord.AddMedicalRecordRequest;
@@ -86,7 +86,7 @@ public class MedicalRecordController {
             @RequestParam(defaultValue = "8") int size,
             @RequestParam(defaultValue = "") String keyword) {
 
-        String email = SercurityUtil.getCurrentUserLogin().isPresent() ? SercurityUtil.getCurrentUserLogin().get() : "";
+        String email = SecurityUtil.getCurrentUserLogin().isPresent() ? SecurityUtil.getCurrentUserLogin().get() : "";
 
         User user = this.userService.handleGetUserByEmail(email);
 

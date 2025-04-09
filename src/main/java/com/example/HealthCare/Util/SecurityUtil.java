@@ -27,13 +27,13 @@ import com.example.HealthCare.dto.request.auth.ResTokenLogin;
 import com.nimbusds.jose.util.Base64;
 
 @Service
-public class SercurityUtil {
+public class SecurityUtil{
 
     private final JwtEncoder jwtEncoder;
 
     public static final MacAlgorithm JW_ALGORITHM = MacAlgorithm.HS512;
 
-    public SercurityUtil(JwtEncoder jwtEncoder) {
+    public SecurityUtil(JwtEncoder jwtEncoder) {
         this.jwtEncoder = jwtEncoder;
     }
 
@@ -86,7 +86,7 @@ public class SercurityUtil {
 
     public Jwt checkValidRefreshToken(String token) {
         NimbusJwtDecoder jwtDecoder = NimbusJwtDecoder.withSecretKey(
-                getSecretKey()).macAlgorithm(SercurityUtil.JW_ALGORITHM).build();
+                getSecretKey()).macAlgorithm(SecurityUtil.JW_ALGORITHM).build();
         try {
             return jwtDecoder.decode(token);
         } catch (Exception e) {

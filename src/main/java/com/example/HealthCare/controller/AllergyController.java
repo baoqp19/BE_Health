@@ -3,6 +3,7 @@ package com.example.HealthCare.controller;
 import java.util.List;
 import java.util.Optional;
 
+import com.example.HealthCare.Util.SecurityUtil;
 import com.example.HealthCare.model.Member;
 import com.example.HealthCare.repository.MemberRepository;
 import org.springframework.data.domain.Page;
@@ -18,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.HealthCare.Util.SercurityUtil;
 import com.example.HealthCare.model.Allergy;
 import com.example.HealthCare.model.User;
 import com.example.HealthCare.dto.request.allergy.AddAllergyRequest;
@@ -46,7 +46,7 @@ public class AllergyController {
     @PostMapping("/allergies")
     public ResponseEntity<?> addAllergy(@Valid @RequestBody AddAllergyRequest addAllergyRequest) {
 
-        String email = SercurityUtil.getCurrentUserLogin().isPresent() ? SercurityUtil.getCurrentUserLogin().get() : "";
+        String email = SecurityUtil.getCurrentUserLogin().isPresent() ? SecurityUtil.getCurrentUserLogin().get() : "";
 
 
         User user = this.userService.handleGetUserByEmail(email);
@@ -108,7 +108,7 @@ public class AllergyController {
             @RequestParam(defaultValue = "8") int size,
             @RequestParam(defaultValue = "") String keyword) {
 
-        String email = SercurityUtil.getCurrentUserLogin().isPresent() ? SercurityUtil.getCurrentUserLogin().get() : "";
+        String email = SecurityUtil.getCurrentUserLogin().isPresent() ? SecurityUtil.getCurrentUserLogin().get() : "";
 
         User user = this.userService.handleGetUserByEmail(email);
 
