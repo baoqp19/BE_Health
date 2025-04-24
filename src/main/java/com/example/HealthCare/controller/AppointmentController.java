@@ -60,13 +60,13 @@ public class AppointmentController {
 
     @DeleteMapping("/appointments/{id}")
     public ResponseEntity<String> deleteAppointment(@PathVariable("id") Integer id) {
-        appointmentService.deleteAppointment(id);
+        this.appointmentService.deleteAppointment(id);
         return ResponseEntity.ok().body("xóa thành công");
     }
 
     @GetMapping("/appointments/{id}")
     public ResponseEntity<Appointment> getDocumentById(@PathVariable("id") Integer id) {
-      Appointment appointment = appointmentService.getAppointmentById(id);
+      Appointment appointment = this.appointmentService.getAppointmentById(id);
         return new ResponseEntity<>(appointment, HttpStatus.OK);
     }
 
@@ -75,7 +75,7 @@ public class AppointmentController {
             @RequestParam(name = "page", defaultValue = "1") int page,
             @RequestParam(name = "size", defaultValue = "8") int size,
             @RequestParam(name = "keyword", required = false) String keyword) {
-        Page<Appointment> appointments = appointmentService.getAllAppointments(page, size, keyword);
+        Page<Appointment> appointments = this.appointmentService.getAllAppointments(page, size, keyword);
         List<Appointment> appointmentsList = appointments.getContent();
 
         return new ResponseEntity<>(appointmentsList, HttpStatus.OK);
