@@ -1,6 +1,8 @@
 package com.example.HealthCare.model;
 
 import com.example.HealthCare.enums.Role;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,7 +18,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "user")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@Table(name = "users")
 public class User {
 
   @Id
@@ -43,7 +46,9 @@ public class User {
   @Column(columnDefinition = "MEDIUMTEXT")
   private String refreshToken;
 
-  @OneToMany(mappedBy = "user")
+
+  @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+  @JsonIgnore
   private List<Token> tokens;
 
 }

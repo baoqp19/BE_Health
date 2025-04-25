@@ -1,6 +1,7 @@
 package com.example.HealthCare.service.impl;
 
 import com.example.HealthCare.dto.PaginationDTO.ResultPaginationDTO;
+import com.example.HealthCare.mapper.MemberMapper;
 import com.example.HealthCare.model.Member;
 import com.example.HealthCare.repository.MemberRepository;
 import com.example.HealthCare.service.MemberService;
@@ -18,7 +19,7 @@ import java.util.List;
 public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
-
+    private final MemberMapper memberMapper;
     @Override
     public Member addMember(Member member) {
         return this.memberRepository.save(member);
@@ -30,7 +31,7 @@ public class MemberServiceImpl implements MemberService {
         Member checkMember = this.memberRepository.findById(member.getMemberID())
                 .orElseThrow(() -> new IllegalArgumentException("Member not found"));
 
-        member.setUserID(checkMember.getUserID());
+        member.setUser(checkMember.getUser());
 
         return this.memberRepository.save(member);
     }

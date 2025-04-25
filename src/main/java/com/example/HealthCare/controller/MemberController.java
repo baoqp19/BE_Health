@@ -1,6 +1,10 @@
 package com.example.HealthCare.controller;
 
+import com.example.HealthCare.Util.CustomPagination;
 import com.example.HealthCare.Util.SecurityUtil;
+import com.example.HealthCare.dto.response.ApiResponse;
+import com.example.HealthCare.dto.response.MemberResponse;
+import com.example.HealthCare.mapper.MemberMapper;
 import com.example.HealthCare.model.Member;
 import com.example.HealthCare.model.User;
 import com.example.HealthCare.dto.request.member.AddMemberRequest;
@@ -25,10 +29,11 @@ public class MemberController {
 
     private final UserService userService;
     private final MemberService memberService;
-
-    public MemberController(UserService userService, MemberService memberService) {
+    private final MemberMapper memberMapper;
+    public MemberController(UserService userService, MemberService memberService, MemberMapper memberMapper) {
         this.memberService = memberService;
         this.userService = userService;
+        this.memberMapper = memberMapper;
     }
 
     @PostMapping("/members")
@@ -41,7 +46,7 @@ public class MemberController {
         User user = this.userService.handleGetUserByEmail(email);
 
         Member member = Member.builder()
-                .userID(user.getId())
+                .user(user)
                 .fullName(addMemberRequest.getFullName())
                 .dateOfBirth(addMemberRequest.getDateOfBirth())
                 .gender(addMemberRequest.getGender().name())
@@ -109,7 +114,7 @@ public class MemberController {
     
     
     @GetMapping("/members")
-    public ResponseEntity<List<Member>> getAllMembers(
+    public ResponseEntity<CustomPagination<MemberResponse>> getAllMembers(
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "8") int size,
             @RequestParam(defaultValue = "") String keyword) {
@@ -120,12 +125,31 @@ public class MemberController {
         
 
         User user = this.userService.handleGetUserByEmail(email);
+        Page<Member> membersPage = memberService.getAllMembers(page, size, keyword, user.getId());
 
-        Page<Member> membersPage = this.memberService.getAllMembers(page, size, keyword, user.getId());
-
-        List<Member> membersContent = membersPage.getContent();
+        Page<MemberResponse> memberResponses = memberMapper.toMembersResponse(membersPage);
+        CustomPagination<MemberResponse> membersContent = new CustomPagination<>(memberResponses);
 
         return new ResponseEntity<>(membersContent, HttpStatus.OK);
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<MemberResponse>> getAllMembersByUser() {
+
+        String email = SecurityUtil.getCurrentUserLogin().isPresent()
+                ? SecurityUtil.getCurrentUserLogin().get()
+                : "";
+
+
+        User user = this.userService.handleGetUserByEmail(email);
+        List<Member> members = memberService.getAllMembersByUserID(user.getId());
+        List<MemberResponse> memberResponses = memberMapper.toMembersList(members);
+        ApiResponse<List<MemberResponse>> response = new ApiResponse<>(
+                HttpStatus.OK.value(),
+                "Get list member successfully",
+                memberResponses
+        );
+        return new ResponseEntity<>(memberResponses, HttpStatus.OK);
     }
 
 }

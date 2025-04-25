@@ -15,6 +15,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+
 @Table(name="medical_records")
 public class MedicalRecord {
     @Id
@@ -25,8 +26,10 @@ public class MedicalRecord {
     //    @OneToMany(mappedBy = "medicalRecord")
     //    private List<Document> documents;
 
-    @Column(name = "member_id", nullable = false)
-    private int memberID;
+    @ManyToOne
+    @JoinColumn(name = "member_id", nullable = false)
+    private Member member;
+
 
     @Column(name = "date")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")

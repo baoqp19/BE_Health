@@ -3,10 +3,12 @@ package com.example.HealthCare.controller;
 
 import com.example.HealthCare.Util.SecurityUtil;
 import com.example.HealthCare.model.MedicalRecord;
+import com.example.HealthCare.model.Member;
 import com.example.HealthCare.model.User;
 import com.example.HealthCare.dto.request.medicalRecord.AddMedicalRecordRequest;
 import com.example.HealthCare.dto.request.medicalRecord.UpdateMedicalRecordRequest;
 import com.example.HealthCare.service.MedicalRecordService;
+import com.example.HealthCare.service.MemberService;
 import com.example.HealthCare.service.UserService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -25,17 +27,19 @@ public class MedicalRecordController {
 
     private final MedicalRecordService medicalRecordService;
     private final UserService userService;
-    public MedicalRecordController(MedicalRecordService medicalRecordService, UserService userService) {
+    private final MemberService memberService;
+    public MedicalRecordController(MedicalRecordService medicalRecordService, UserService userService, MemberService memberService) {
         this.medicalRecordService = medicalRecordService;
         this.userService = userService;
+        this.memberService = memberService;
     }
 
     @PostMapping("/medical-records")
 
     public ResponseEntity<MedicalRecord> addMedicalRecord(@Valid @RequestBody AddMedicalRecordRequest addMedicalRecordRequest) {
-
+        Member member = memberService.getMemberById(addMedicalRecordRequest.getMemberID());
         MedicalRecord medicalRecord = MedicalRecord.builder()
-                .memberID(addMedicalRecordRequest.getMemberID())
+                .member(member)
                 .date(addMedicalRecordRequest.getDate())
                 .doctor(addMedicalRecordRequest.getDoctor())
                 .symptoms(addMedicalRecordRequest.getSymptoms())
@@ -53,9 +57,11 @@ public class MedicalRecordController {
     public ResponseEntity<MedicalRecord> updateMedicalRecord(
             @PathVariable("id") Integer id,
             @Valid @RequestBody UpdateMedicalRecordRequest updateMedicalRecordRequest) {
+
+        Member member = memberService.getMemberById(updateMedicalRecordRequest.getMemberID());
         MedicalRecord medicalRecord = MedicalRecord.builder()
                 .recordID(id)
-                .memberID(updateMedicalRecordRequest.getMemberID())
+                .member(member)
                 .date(updateMedicalRecordRequest.getDate())
                 .doctor(updateMedicalRecordRequest.getDoctor())
                 .symptoms(updateMedicalRecordRequest.getSymptoms())

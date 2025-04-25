@@ -52,6 +52,9 @@ public class AppointmentServiceImpl implements AppointmentService {
         if (keyword != null && !keyword.isEmpty()) {
             return this.appointmentRepository.findByKeyword(keyword, pageable);
         }
-        return this.appointmentRepository.findAll(pageable);
+        return appointmentRepository.findByKeyword(keyword, pageable);
     }
 }
+
+
+

@@ -1,5 +1,8 @@
 package com.example.HealthCare.controller;
 
+import com.example.HealthCare.Util.CustomPagination;
+import com.example.HealthCare.dto.response.AppointmentResponse;
+import com.example.HealthCare.mapper.AppointmentMapper;
 import com.example.HealthCare.model.Appointment;
 import com.example.HealthCare.model.Member;
 import com.example.HealthCare.dto.request.appointment.AddAppointmentRequest;
@@ -23,11 +26,16 @@ public class AppointmentController {
     private final AppointmentService appointmentService;
     private final UserService userService;
     private final MemberService memberService;
-
-    public AppointmentController(AppointmentService appointmentService, UserService userService, MemberService memberService) {
+    private final AppointmentMapper appointmentMapper;
+    public AppointmentController(
+            AppointmentService appointmentService,
+            UserService userService,
+            MemberService memberService,
+            AppointmentMapper appointmentMapper) {
         this.appointmentService = appointmentService;
         this.userService = userService;
         this.memberService = memberService;
+        this.appointmentMapper = appointmentMapper;
     }
 
     @PostMapping("/appointments")
@@ -71,14 +79,15 @@ public class AppointmentController {
     }
 
     @GetMapping("/appointments")
-    public ResponseEntity<List<Appointment>> getAllAppointments(
+    public ResponseEntity<CustomPagination<AppointmentResponse>> getAllAppointments(
             @RequestParam(name = "page", defaultValue = "1") int page,
             @RequestParam(name = "size", defaultValue = "8") int size,
             @RequestParam(name = "keyword", required = false) String keyword) {
         Page<Appointment> appointments = this.appointmentService.getAllAppointments(page, size, keyword);
-        List<Appointment> appointmentsList = appointments.getContent();
+        Page<AppointmentResponse> appointmentsList = appointmentMapper.toAppointmentsResponse(appointments);
+        CustomPagination<AppointmentResponse> appointmentResponseCustomPagination = new CustomPagination<AppointmentResponse>(appointmentsList);
 
-        return new ResponseEntity<>(appointmentsList, HttpStatus.OK);
+        return new ResponseEntity<>(appointmentResponseCustomPagination, HttpStatus.OK);
     }
 
 }

@@ -1,5 +1,6 @@
 package com.example.HealthCare.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -12,6 +13,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Table(name = "members")
 public class Member {
 
@@ -19,8 +21,9 @@ public class Member {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int memberID;
 
-    @Column(name = "user_id", nullable = false)
-    private int userID;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     @Column(name = "full_name", nullable = false)
     private String fullName;
