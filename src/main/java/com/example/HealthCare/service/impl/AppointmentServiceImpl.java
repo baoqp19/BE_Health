@@ -49,11 +49,8 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Override
     public Page<Appointment> getAllAppointments(int page, int size, String keyword) {
         Pageable pageable = PageRequest.of(page - 1, size);
-        if (keyword != null && !keyword.isEmpty()) {
             return this.appointmentRepository.findByKeyword(keyword, pageable);
         }
-        return appointmentRepository.findByKeyword(keyword, pageable);
-    }
 }
 
 

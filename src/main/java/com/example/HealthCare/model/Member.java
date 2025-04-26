@@ -21,10 +21,6 @@ public class Member {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int memberID;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
-
     @Column(name = "full_name", nullable = false)
     private String fullName;
 
@@ -45,5 +41,10 @@ public class Member {
 
     @Column(name = "weight")
     private float weight;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
 
 }

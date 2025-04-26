@@ -23,14 +23,6 @@ public class MedicalRecord {
     @Column(name="record_id")
     private int recordID;
 
-    //    @OneToMany(mappedBy = "medicalRecord")
-    //    private List<Document> documents;
-
-    @ManyToOne
-    @JoinColumn(name = "member_id", nullable = false)
-    private Member member;
-
-
     @Column(name = "date")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate date;
@@ -49,5 +41,9 @@ public class MedicalRecord {
 
     @Column(name="facility_name")
     private String facilityName;
+
+    @ManyToOne
+    @JoinColumn(name = "member_id", referencedColumnName = "memberID", nullable = false)
+    private Member member;
 
 }

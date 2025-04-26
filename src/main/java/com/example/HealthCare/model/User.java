@@ -19,7 +19,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-@Table(name = "users")
+@Table(name = "user")
 public class User {
 
   @Id
@@ -50,5 +50,10 @@ public class User {
   @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
   @JsonIgnore
   private List<Token> tokens;
+
+  @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+  @JsonIgnore
+  private List<Member> members;
+
 
 }

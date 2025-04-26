@@ -80,14 +80,14 @@ public class MedicalRecordController {
         return ResponseEntity.ok().body("xoá thành công");
     }
     @GetMapping("/medical-records/{id}")
-    public ResponseEntity<Optional<MedicalRecord> > getMedicalRecordById(@PathVariable("id") Integer id) {
+    public ResponseEntity<Optional<?> > getMedicalRecordById(@PathVariable("id") Integer id) {
         Optional<MedicalRecord> medicalRecord = this.medicalRecordService.findMedicalRecordById(id);
 
         return new ResponseEntity<>(medicalRecord, HttpStatus.OK);
     }
 
     @GetMapping("/medical-records")
-    public ResponseEntity<List<MedicalRecord>> getAllMedicalRecords(
+    public ResponseEntity<List<?>> getAllMedicalRecords(
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "8") int size,
             @RequestParam(defaultValue = "") String keyword) {
