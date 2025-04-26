@@ -1,9 +1,8 @@
 package com.example.HealthCare.service.impl;
 
-import com.example.HealthCare.model.Vaccination;
+import com.example.HealthCare.model.Vaccication;
 import com.example.HealthCare.repository.VaccicationRepository;
 import com.example.HealthCare.service.VaccinationService;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,13 +20,13 @@ public class VaccinationServiceImpl implements VaccinationService {
     }
 
     @Override
-    public Vaccination addVaccication(Vaccination vaccination) {
+    public Vaccication addVaccication(Vaccication vaccination) {
         return this.vaccicationRepository.save(vaccination);
     }
 
     @Override
-    public Vaccination updateVaccication(Vaccination vaccination) {
-        Vaccination check = this.vaccicationRepository.findById(vaccination.getVaccinationID())
+    public Vaccication updateVaccication(Vaccication vaccination) {
+        Vaccication check = this.vaccicationRepository.findById(vaccination.getVaccinationID())
                 .orElseThrow(() -> new IllegalArgumentException("Vaccication not found"));
         vaccination.setVaccinationID(check.getVaccinationID());
         return this.vaccicationRepository.save(vaccination);
@@ -39,18 +38,19 @@ public class VaccinationServiceImpl implements VaccinationService {
     }
 
     @Override
-    public Vaccination getVaccicationById(Integer vaccicationID) {
+    public Vaccication getVaccicationById(Integer vaccicationID) {
         return this.vaccicationRepository.findById(vaccicationID)
                 .orElseThrow(() -> new IllegalArgumentException("Vaccication not found"));
     }
 
     @Override
-    public Page<Vaccination> getAllVaccications(int page, int size, String keyword) {
+    public Page<Vaccication> getAllVaccications(int page, int size, int userId, String keyword, Long memberId) {
         Pageable pageable = PageRequest.of(page - 1, size);
-        if (keyword != null && !keyword.isEmpty()) {
-            return this.vaccicationRepository.findByKeyword(keyword, pageable);
+        if (memberId != null) {
+            return vaccicationRepository.findByKeywordAndMember(memberId, keyword, userId, pageable);
+        } else {
+            return vaccicationRepository.findByKeyword(keyword, userId, pageable);
         }
-        return this.vaccicationRepository.findAll(pageable);
     }
 
 }

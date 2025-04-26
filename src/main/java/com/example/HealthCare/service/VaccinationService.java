@@ -1,16 +1,16 @@
 package com.example.HealthCare.service;
 
-import com.example.HealthCare.model.Vaccination;
+import com.example.HealthCare.model.Vaccication;
 import org.springframework.data.domain.Page;
 
 public interface VaccinationService {
-    Vaccination addVaccication(Vaccination member);
+    Vaccication addVaccication(Vaccication member);
 
-    Vaccination updateVaccication(Vaccination member);
+    Vaccication updateVaccication(Vaccication member);
 
     void deleteVaccication(Integer memberID);
 
-    Vaccination getVaccicationById(Integer memberID);
+    Vaccication getVaccicationById(Integer memberID);
 
-    Page<Vaccination> getAllVaccications(int page, int size, String keyword);
+    Page<Vaccication> getAllVaccications(int page, int size, int userId, String keyword, Long memberId);
 }

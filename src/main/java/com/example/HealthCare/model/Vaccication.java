@@ -15,7 +15,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 @AllArgsConstructor
 @Entity
 @Table(name = "vaccinations")
-public class Vaccination {
+public class Vaccication {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

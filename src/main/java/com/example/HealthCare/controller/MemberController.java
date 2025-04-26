@@ -133,7 +133,7 @@ public class MemberController {
         return new ResponseEntity<>(membersContent, HttpStatus.OK);
     }
 
-    @GetMapping("/all")
+    @GetMapping("/members/all")
     public ResponseEntity<List<MemberResponse>> getAllMembersByUser() {
 
         String email = SecurityUtil.getCurrentUserLogin().isPresent()
@@ -144,11 +144,6 @@ public class MemberController {
         User user = this.userService.handleGetUserByEmail(email);
         List<Member> members = memberService.getAllMembersByUserID(user.getId());
         List<MemberResponse> memberResponses = memberMapper.toMembersList(members);
-        ApiResponse<List<MemberResponse>> response = new ApiResponse<>(
-                HttpStatus.OK.value(),
-                "Get list member successfully",
-                memberResponses
-        );
         return new ResponseEntity<>(memberResponses, HttpStatus.OK);
     }
 
