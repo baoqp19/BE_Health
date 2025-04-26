@@ -2,6 +2,10 @@ package com.example.HealthCare.service.impl;
 
 import java.util.Optional;
 
+import com.example.HealthCare.Util.CustomPagination;
+import com.example.HealthCare.dto.request.allergy.AddAllergyRequest;
+import com.example.HealthCare.dto.response.AllergyResponse;
+import com.example.HealthCare.mapper.AllergyMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -26,8 +30,9 @@ public class AllergyServiceImpl implements AllergyService {
     }
 
     @Override
-    public Allergy addAllergy(Allergy allergy) {
-        return this.allergyRepository.save(allergy);
+    public Allergy addAllergy(AddAllergyRequest addAllergyRequest) {
+        Allergy allergy = AllergyMapper.INSTANCE.convectToAllergy(addAllergyRequest);
+        return allergyRepository.save(allergy);
     }
 
     @Override
@@ -45,12 +50,17 @@ public class AllergyServiceImpl implements AllergyService {
     }
 
     @Override
-    public Page<Allergy> getAllAllergies(int page, int size, String keyword, Integer userID) {
+    public CustomPagination<AllergyResponse> getAllAllergies(int page, int size, String keyword, Integer userID, Long memberId) {
         Pageable pageable = PageRequest.of(page - 1, size);
-        if (keyword != null && !keyword.isEmpty()) {
-            return this.allergyRepository.findByKeyword(keyword, pageable, userID);
+        Page<Allergy> allergies;
+        if(memberId != null){
+            allergies = allergyRepository.findByKeywordAndMember(memberId, keyword, userID, pageable);
+        } else {
+            allergies = allergyRepository.findByKeyword(keyword, pageable, userID);
         }
-        return this.allergyRepository.getAllergiesByUserID(userID, pageable);
+        Page<AllergyResponse> allergyResponses = allergies.map(AllergyMapper.INSTANCE::toAllergyResponse);
+        CustomPagination<AllergyResponse> allergyContent = new CustomPagination<>(allergyResponses);
+        return allergyContent;
     }
 
     @Override

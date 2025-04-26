@@ -1,5 +1,9 @@
 package com.example.HealthCare.service;
 import java.util.Optional;
+
+import com.example.HealthCare.Util.CustomPagination;
+import com.example.HealthCare.dto.request.allergy.AddAllergyRequest;
+import com.example.HealthCare.dto.response.AllergyResponse;
 import org.springframework.data.domain.Page;
 import com.example.HealthCare.model.Allergy;
 
@@ -7,18 +11,15 @@ import com.example.HealthCare.model.Allergy;
 
 public interface AllergyService {
 
-    public Allergy addAllergy(Allergy allergy);
+    Allergy addAllergy(AddAllergyRequest allergy);
 
     Allergy updateAllergy(Allergy allergy);
 
     void deleteAllergy(Integer allergyID);
 
-    Page<Allergy> getAllAllergies(int page, int size,String keyword,Integer userID);
+    CustomPagination<AllergyResponse> getAllAllergies(int page, int size, String keyword, Integer userID, Long memberId);
 
-    // Search
-    Optional<Allergy> findAllergyById(Integer allergyID);
-    // Page<Allergy> findBySeverity(String severity,Pageable pageable);
-    // Page<Allergy> findByAllergyType(String allergyType, Pageable pageable);
+    Optional <Allergy> findAllergyById(Integer allergyID);
 }
 
 

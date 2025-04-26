@@ -3,7 +3,9 @@ package com.example.HealthCare.controller;
 import java.util.List;
 import java.util.Optional;
 
+import com.example.HealthCare.Util.CustomPagination;
 import com.example.HealthCare.Util.SecurityUtil;
+import com.example.HealthCare.dto.response.AllergyResponse;
 import com.example.HealthCare.model.Member;
 import com.example.HealthCare.repository.MemberRepository;
 import org.springframework.data.domain.Page;
@@ -53,16 +55,8 @@ public class AllergyController {
         Member member = this.memberRepository.findById(addAllergyRequest.getMemberID())
                 .orElseThrow(() -> new RuntimeException("Member Not Found"));
 
-        Allergy allergy = Allergy.builder()
-                .memberID(member.getMemberID())
-                .allergyType(addAllergyRequest.getAllergyType())
-                .severity(addAllergyRequest.getSeverity())
-                .symptoms(addAllergyRequest.getSymptoms())
-                .build();
-
-        log.info(allergy.toString());
-
-        Allergy createdAllergy = this.allergyService.addAllergy(allergy);
+        addAllergyRequest.setMember(member);
+        Allergy createdAllergy = allergyService.addAllergy(addAllergyRequest);
 
         return new ResponseEntity<>(createdAllergy, HttpStatus.CREATED);
     }
@@ -77,7 +71,7 @@ public class AllergyController {
 
         Allergy allergy = Allergy.builder()
                 .allergyID(id)
-                .memberID(member.getMemberID())
+                .member(member)
                 .allergyType(updateAllergyRequest.getAllergyType())
                 .severity(updateAllergyRequest.getSeverity())
                 .symptoms(updateAllergyRequest.getSymptoms())
@@ -102,21 +96,21 @@ public class AllergyController {
     }
 
     @GetMapping("/allergies")
-    public ResponseEntity<List<Allergy>> getAllAllergies(
+    public ResponseEntity<CustomPagination<AllergyResponse>> getAllAllergies(
 
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "8") int size,
-            @RequestParam(defaultValue = "") String keyword) {
+            @RequestParam(defaultValue = "") String keyword,
+            @RequestParam(required = false) Long memberId) {
 
         String email = SecurityUtil.getCurrentUserLogin().isPresent() ? SecurityUtil.getCurrentUserLogin().get() : "";
 
         User user = this.userService.handleGetUserByEmail(email);
 
-        Page<Allergy> alleriesPage = allergyService.getAllAllergies(page,size,keyword, user.getId());
+        CustomPagination<AllergyResponse> alleriesPage = allergyService.getAllAllergies(page,size,keyword, user.getId(), memberId);
 
-        List<Allergy> allergies = alleriesPage.getContent();
 
-        return new ResponseEntity<>(allergies, HttpStatus.OK);
+        return new ResponseEntity<>(alleriesPage, HttpStatus.OK);
     }
 
 }

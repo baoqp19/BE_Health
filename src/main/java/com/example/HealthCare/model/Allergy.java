@@ -1,11 +1,6 @@
 package com.example.HealthCare.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -28,8 +23,9 @@ public class Allergy {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int allergyID;
 
-    @Column(name = "member_id", nullable = false)
-    private int memberID;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "member_id", nullable = false)
+    private Member member;
 
     @Column(name = "allergy_type")
     private String allergyType;

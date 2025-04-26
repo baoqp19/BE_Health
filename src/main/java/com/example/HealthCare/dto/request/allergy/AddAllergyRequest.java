@@ -1,5 +1,6 @@
 package com.example.HealthCare.dto.request.allergy;
 
+import com.example.HealthCare.model.Member;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -18,8 +19,8 @@ import lombok.Setter;
 public class AddAllergyRequest {
 
     private Integer allergyID;
-
     private Integer memberID;
+    private Member member;
 
     @NotBlank(message = "Allergy type is required")
     @Size(max = 100, message = "Allergy type must not exceed 100 characters")
