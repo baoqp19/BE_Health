@@ -3,3 +3,13 @@ spring:
     url: jdbc:mysql://${DATABASE_URI}
     username: ${DATABASE_USERNAME}
     password: ${DATABASE_PASSWORD}
+
+swagger:
+  contact-name: Pham Quoc Bao
+  contact-mail: qpBao@gmail.com
+  contact-url: https://pqbao.id.vn
+  app-name: Family Health
+  app-description: "Family Health is built on Spring Boot + React"
+  app-version: 3.3.1
+  app-license-url: https://www.apache.org/licenses/LICENSE-2.0.html
+  app-license: Apache 2.0

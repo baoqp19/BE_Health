@@ -4,10 +4,13 @@ import com.example.HealthCare.dto.response.AppointmentResponse;
 import com.example.HealthCare.model.Appointment;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.factory.Mappers;
 import org.springframework.data.domain.Page;
 
 @Mapper(componentModel = "spring")
 public interface AppointmentMapper {
+
+    AppointmentMapper INSTANCE = Mappers.getMapper(AppointmentMapper.class);
     @Mapping(source = "member.memberID", target = "member.memberID")
     AppointmentResponse toAppointmentResponse(Appointment appointment);
 
