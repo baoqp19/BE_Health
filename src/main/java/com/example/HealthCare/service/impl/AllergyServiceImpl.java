@@ -20,7 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
-public class AllergyServiceImpl implements AllergyService {
+public class  AllergyServiceImpl implements AllergyService {
 
     private final AllergyRepository allergyRepository;
 
@@ -37,7 +37,7 @@ public class AllergyServiceImpl implements AllergyService {
 
     @Override
     public Allergy updateAllergy(Allergy allergy) {
-        Allergy check = this.allergyRepository.findById(allergy.getAllergyID())
+        Allergy check = this.allergyRepository.findById(allergy.getId())
                 .orElseThrow(() -> new IllegalArgumentException("Allergy not found "));
         return this.allergyRepository.save(allergy);
     }
@@ -46,7 +46,7 @@ public class AllergyServiceImpl implements AllergyService {
     public void deleteAllergy(Integer allergyID) {
         Allergy check = allergyRepository.findById(allergyID)
                 .orElseThrow(() -> new IllegalArgumentException("Allergy not found"));
-        allergyRepository.deleteById(check.getAllergyID());
+        allergyRepository.deleteById(check.getId());
     }
 
     @Override

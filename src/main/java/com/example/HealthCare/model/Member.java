@@ -16,15 +16,18 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Table(name = "members")
 public class Member {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int memberID;
+    private int id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     @Column(name = "full_name", nullable = false)
     private String fullName;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    @Column(name = "date_of_birth", nullable = false)
     private LocalDate dateOfBirth;
 
     @Column(name = "gender")
@@ -41,10 +44,4 @@ public class Member {
 
     @Column(name = "weight")
     private float weight;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
-
-
 }

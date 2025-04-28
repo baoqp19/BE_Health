@@ -26,9 +26,9 @@ public class VaccinationServiceImpl implements VaccinationService {
 
     @Override
     public Vaccication updateVaccication(Vaccication vaccination) {
-        Vaccication check = this.vaccicationRepository.findById(vaccination.getVaccinationID())
+        Vaccication check = this.vaccicationRepository.findById(vaccination.getId())
                 .orElseThrow(() -> new IllegalArgumentException("Vaccication not found"));
-        vaccination.setVaccinationID(check.getVaccinationID());
+        vaccination.setId(check.getId());
         return this.vaccicationRepository.save(vaccination);
     }
 

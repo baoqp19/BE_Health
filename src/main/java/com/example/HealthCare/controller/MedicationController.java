@@ -42,7 +42,7 @@ public class MedicationController {
     @PostMapping("/medications")
     public ResponseEntity<?> addMedication(@Valid @RequestBody AddMedicationRequest addMedicationRequest) {
         Medication medication = Medication.builder()
-                .recordID(addMedicationRequest.getRecordID())
+//                .recordID(addMedicationRequest.getRecordID())
                 .name(addMedicationRequest.getName())
                 .frequency(addMedicationRequest.getFrequency())
                 .startDate(addMedicationRequest.getStartDate())
@@ -61,7 +61,7 @@ public class MedicationController {
             @PathVariable("id") Integer id,
             @Valid @RequestBody UpdateMedicationRequest updateMedicationRequest) {
         Medication medication = Medication.builder()
-                .medicationID(id)
+                .id(id)
                 .name(updateMedicationRequest.getName())
                 .frequency(updateMedicationRequest.getFrequency())
                 .startDate(updateMedicationRequest.getStartDate())

@@ -7,6 +7,8 @@ import lombok.*;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import java.util.Date;
+
 @Data
 @Builder
 @AllArgsConstructor
@@ -15,16 +17,15 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 @Setter
 public class AddVaccinationRequest {
 
-    private Integer vaccinationID;
+    private Integer vaccinationId;
 
     @NotNull(message = "MemberId is required")
-    private Integer memberID;
+    private Integer memberId;
 
     @NotBlank(message = "VaccineName is required")
     private String vaccineName;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    @Column(name = "date_administered")
-    private java.time.LocalDate dateAdministered;
+    @NotNull(message = "DateAdministered is required")
+    private Date dateAdministered;
 
 }

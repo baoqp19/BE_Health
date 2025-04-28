@@ -32,6 +32,10 @@ public interface UserService {
     Page<UserResponse> getAllUsers(int page, int size, String keyword);
 
     UserResponse updateBlockStateUser(Integer id);
+
+    AuthenticationResponse authenticate(String credential);
+
+    AuthenticationResponse authenticateWithEmail(String email);
     
 }
 

@@ -16,8 +16,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
-
 @RestController
 @RequestMapping("/api/v1")
 @Slf4j
@@ -37,14 +35,14 @@ public class HealthStatController {
     public ResponseEntity<HealthStat> addHealthStat
             (@Valid @RequestBody AddHealthStatRequest addHealthStatRequest) {
 
-         Member member =  this.memberService.getMemberById(addHealthStatRequest.getMemberID());
+        Member member = memberService.getMemberById(addHealthStatRequest.getMemberId());
 
         if(member == null) {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
 
         HealthStat healthStat = HealthStat.builder()
-                .memberID(addHealthStatRequest.getMemberID())
+                .member(member)
                 .statType(addHealthStatRequest.getStatType())
                 .statValue(addHealthStatRequest.getStatValue())
                 .date(addHealthStatRequest.getDate())
@@ -59,7 +57,7 @@ public class HealthStatController {
             @PathVariable("id") Integer id,
             @Valid @RequestBody UpdateHealthStatRequest updateHealthStatRequest) {
         HealthStat healthStat = HealthStat.builder()
-                .statID(id)
+                .id(id)
                 .statType(updateHealthStatRequest.getStatType())
                 .statValue(updateHealthStatRequest.getStatValue())
                 .date(updateHealthStatRequest.getDate())

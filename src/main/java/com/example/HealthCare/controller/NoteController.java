@@ -8,6 +8,7 @@ import com.example.HealthCare.model.User;
 import com.example.HealthCare.repository.NoteRepository;
 import com.example.HealthCare.service.NoteService;
 import com.example.HealthCare.service.UserService;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -32,22 +33,24 @@ public class NoteController {
         this.noteService = noteService;
         this.userService = userService;
     }
-
     @PostMapping("/notes")
     public ResponseEntity<?> addNote(@Valid @RequestBody AddNoteRequest addNoteRequest) {
-
-        String email = SecurityUtil.getCurrentUserLogin().isPresent() ? SecurityUtil.getCurrentUserLogin().get() : "";
+        // Lấy email của người dùng hiện tại
+        String email = SecurityUtil.getCurrentUserLogin().orElseThrow(() -> new IllegalArgumentException("User not found"));
         User user = this.userService.handleGetUserByEmail(email);
 
+        // Tạo đối tượng Note mới từ request
         Note note = Note.builder()
-                .userID(user.getId())
+                .user(user)
                 .title(addNoteRequest.getTitle())
                 .content(addNoteRequest.getContent())
                 .createAt(addNoteRequest.getCreateAt())
                 .noteIndex(addNoteRequest.getNoteIndex())
                 .build();
+
         log.info(note.toString());
 
+        // Gọi service để thêm note vào hệ thống
         Note createdNote = noteService.addNote(note);
         return new ResponseEntity<>(createdNote, HttpStatus.OK);
     }
@@ -57,21 +60,24 @@ public class NoteController {
             @PathVariable("id") Integer id,
             @Valid @RequestBody UpdateNoteRequest updateNoteRequest) {
 
-        String email = SecurityUtil.getCurrentUserLogin().isPresent() ? SecurityUtil.getCurrentUserLogin().get() : "";
+        // Lấy email của người dùng hiện tại
+        String email = SecurityUtil.getCurrentUserLogin().orElseThrow(() -> new IllegalArgumentException("User not found"));
         User user = this.userService.handleGetUserByEmail(email);
 
+        // Tạo đối tượng Note mới từ request và ID
         Note note = Note.builder()
-                .noteID(id)
-                .userID(user.getId())
+                .id(id)
+                .user(user)
                 .title(updateNoteRequest.getTitle())
                 .content(updateNoteRequest.getContent())
                 .createAt(updateNoteRequest.getCreateAt())
                 .noteIndex(updateNoteRequest.getNoteIndex())
                 .build();
+
+        // Gọi service để cập nhật note
         Note updatedNote = noteService.updateNote(note);
         return new ResponseEntity<>(updatedNote, HttpStatus.OK);
     }
-
     @DeleteMapping("/notes/{id}")
     public ResponseEntity<String> deleteNote(@PathVariable("id") Integer id) {
         noteService.deleteNote(id);

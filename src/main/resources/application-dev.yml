@@ -1,4 +1,7 @@
 spring:
+  jackson:
+    date-format: yyyy-MM-dd
+    time-zone: UTC
   port: 8080
   servlet:
     multipart:
@@ -60,3 +63,4 @@ swagger:
   app-version: 3.3.1
   app-license-url: https://www.apache.org/licenses/LICENSE-2.0.html
   app-license: Apache 2.0
+

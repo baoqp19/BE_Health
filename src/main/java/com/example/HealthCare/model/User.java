@@ -47,11 +47,11 @@ public class User {
   private String refreshToken;
 
 
-  @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+  @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
   @JsonIgnore
   private List<Token> tokens;
 
-  @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+  @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
   @JsonIgnore
   private List<Member> members;
 

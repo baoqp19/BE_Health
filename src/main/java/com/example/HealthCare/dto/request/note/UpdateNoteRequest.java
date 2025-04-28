@@ -25,5 +25,5 @@ public class UpdateNoteRequest {
     @PastOrPresent(message = "Create date must be today or in the past")
     private java.time.LocalDate createAt;
 
-    private Integer noteIndex;
+    private Long noteIndex;
 }

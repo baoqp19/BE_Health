@@ -1,6 +1,8 @@
 package com.example.HealthCare.controller;
 
 import com.example.HealthCare.dto.request.google.GoogleLoginRequest;
+import com.example.HealthCare.dto.response.ApiResponse;
+import com.example.HealthCare.dto.response.AuthenticationResponse;
 import com.example.HealthCare.service.OAuthService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +25,7 @@ public class OAuth2Controller {
     }
 
     @PostMapping("/google")
-    public ResponseEntity<String> googleLogin(@Valid @RequestBody GoogleLoginRequest request) {
+    public ResponseEntity<AuthenticationResponse> googleLogin(@Valid @RequestBody GoogleLoginRequest request) {
         return ResponseEntity.ok(this.oAuthService.authenticate(request.getCredential()));
     }
 }

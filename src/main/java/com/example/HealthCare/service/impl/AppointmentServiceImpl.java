@@ -28,7 +28,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     public Appointment updateAppointment(Appointment appointment) {
-        Appointment check = this.appointmentRepository.findById(appointment.getAppointmentID())
+        Appointment check = this.appointmentRepository.findById(appointment.getId())
                 .orElseThrow(() -> new IllegalArgumentException("Appointment not found"));
         return this.appointmentRepository.save(appointment);
     }

@@ -3,8 +3,10 @@ package com.example.HealthCare.dto.request.healthStat;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonFormat.Shape;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Past;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
@@ -15,9 +17,9 @@ import java.time.LocalDateTime;
 @Setter
 public class AddHealthStatRequest {
 
-    private Integer statID;
+    private Integer id;
 
-    private Integer memberID;
+    private Integer memberId;
 
     private String statType;
 
@@ -27,5 +29,4 @@ public class AddHealthStatRequest {
     @NotNull(message = "Date and time is required")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private java.time.LocalDate date;
-
 }

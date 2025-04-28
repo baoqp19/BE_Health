@@ -40,7 +40,7 @@ public class AppointmentController {
 
     @PostMapping("/appointments")
     public ResponseEntity<Appointment> addAppointment(@RequestBody @Valid AddAppointmentRequest addAppointmentRequest) {
-        Member member = memberService.getMemberById(addAppointmentRequest.getMemberID());
+        Member member = memberService.getMemberById(addAppointmentRequest.getMemberId());
         Appointment appointment = Appointment.builder()
 
                 .doctor(addAppointmentRequest.getDoctor())
@@ -54,9 +54,9 @@ public class AppointmentController {
     
     @PutMapping("/appointments/{id}")
     public ResponseEntity<Appointment> updateAppointment(  @PathVariable("id") Integer id,  @Valid @RequestBody UpdateAppointmentRequest updateAppointmentRequest) {
-        Member member = memberService.getMemberById(updateAppointmentRequest.getMemberID());
+        Member member = memberService.getMemberById(updateAppointmentRequest.getMemberId());
         Appointment appointment = Appointment.builder()
-                .appointmentID(id)
+                .id(id)
                 .member(member)
                 .doctor(updateAppointmentRequest.getDoctor())
                 .time(updateAppointmentRequest.getTime())

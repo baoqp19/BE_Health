@@ -11,7 +11,6 @@ import org.springframework.data.domain.Page;
 public interface AppointmentMapper {
 
     AppointmentMapper INSTANCE = Mappers.getMapper(AppointmentMapper.class);
-    @Mapping(source = "member.memberID", target = "member.memberID")
     AppointmentResponse toAppointmentResponse(Appointment appointment);
 
     default Page<AppointmentResponse> toAppointmentsResponse(Page<Appointment> appointments) {

@@ -45,18 +45,8 @@ public class MemberController {
 
         User user = this.userService.handleGetUserByEmail(email);
 
-        Member member = Member.builder()
-                .user(user)
-                .fullName(addMemberRequest.getFullName())
-                .dateOfBirth(addMemberRequest.getDateOfBirth())
-                .gender(addMemberRequest.getGender().name())
-                .relationship(addMemberRequest.getRelationship())
-                .bloodType(addMemberRequest.getBloodType().name())
-                .height(addMemberRequest.getHeight())
-                .weight(addMemberRequest.getWeight())
-                .build();
-        log.info(member.toString());
-
+        Member member = MemberMapper.INSTANCE.toMember(addMemberRequest);
+        member.setUser(user);
         Member createdMember = this.memberService.addMember(member);
 
         return new ResponseEntity<>(createdMember, HttpStatus.OK);
@@ -66,17 +56,8 @@ public class MemberController {
     public ResponseEntity<Member> updateMember(@Valid @PathVariable("id") Integer id,
             @RequestBody UpdateMemberRequest updateMemberRequest) {
 
-        Member member = Member.builder()
-                .memberID(id)
-                .fullName(updateMemberRequest.getFullName())
-                .dateOfBirth(updateMemberRequest.getDateOfBirth())
-                .gender(updateMemberRequest.getGender().name())
-                .relationship(updateMemberRequest.getRelationship())
-                .bloodType(updateMemberRequest.getBloodType().name())
-                .height(updateMemberRequest.getHeight())
-                .weight(updateMemberRequest.getWeight())
-                .build();
-
+        Member member = MemberMapper.INSTANCE.toMember(updateMemberRequest);
+        member.setId(id);
         Member updatedMember = this.memberService.updateMember(member);
 
         return ResponseEntity.ok(updatedMember);

@@ -47,7 +47,7 @@ public class VaccinationController {
     @PostMapping("/vaccinations")
     public ResponseEntity<Vaccication> addVaccination(
             @Valid @RequestBody AddVaccinationRequest addVaccinationRequest) {
-        Member checkMember = memberService.getMemberById(addVaccinationRequest.getMemberID());
+        Member checkMember = memberService.getMemberById(addVaccinationRequest.getMemberId());
 
         if (checkMember == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Member not found");
@@ -68,13 +68,13 @@ public class VaccinationController {
             @PathVariable("id") Integer id,
             @Valid @RequestBody UpdateVaccinationRequest updateVaccinationRequest) {
 
-        Member checkMember = memberService.getMemberById(updateVaccinationRequest.getMemberID());
+        Member checkMember = memberService.getMemberById(updateVaccinationRequest.getMemberId());
 
         if (checkMember == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Member not found");
         }
         Vaccication vaccination = Vaccication.builder()
-                .vaccinationID(id)
+                .id(id)
                 .member(checkMember)
                 .vaccineName(updateVaccinationRequest.getVaccineName())
                 .dateAdministered(updateVaccinationRequest.getDateAdministered())

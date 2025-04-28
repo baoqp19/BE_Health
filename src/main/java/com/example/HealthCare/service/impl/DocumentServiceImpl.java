@@ -30,7 +30,7 @@ public class DocumentServiceImpl implements DocumentService {
 
     @Override
     public Document updateDocument(Document document) {
-        Document check = this.documentRepository.findById(document.getDocumentID())
+        Document check = this.documentRepository.findById(document.getId())
                 .orElseThrow(() -> new IllegalArgumentException("Document not found"));
 
         return this.documentRepository.save(document);
@@ -40,7 +40,7 @@ public class DocumentServiceImpl implements DocumentService {
     public void deleteDocument(Integer documentID) {
         Document check = this.documentRepository.findById(documentID)
                 .orElseThrow(() -> new IllegalArgumentException("Document not found"));
-        this.documentRepository.deleteById(check.getDocumentID());
+        this.documentRepository.deleteById(check.getId());
     }
 
     @Override

@@ -52,7 +52,7 @@ public class AllergyController {
 
 
         User user = this.userService.handleGetUserByEmail(email);
-        Member member = this.memberRepository.findById(addAllergyRequest.getMemberID())
+        Member member = this.memberRepository.findById(addAllergyRequest.getMemberId())
                 .orElseThrow(() -> new RuntimeException("Member Not Found"));
 
         addAllergyRequest.setMember(member);
@@ -66,11 +66,11 @@ public class AllergyController {
 
             @PathVariable("id") Integer id,
             @Valid @RequestBody UpdateAllergyRequest updateAllergyRequest) {
-        Member member = this.memberRepository.findById(updateAllergyRequest.getMemberID())
+        Member member = this.memberRepository.findById(updateAllergyRequest.getMemberId())
                 .orElseThrow(() -> new RuntimeException("Member Not Found"));
 
         Allergy allergy = Allergy.builder()
-                .allergyID(id)
+                .id(id)
                 .member(member)
                 .allergyType(updateAllergyRequest.getAllergyType())
                 .severity(updateAllergyRequest.getSeverity())

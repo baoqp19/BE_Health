@@ -28,7 +28,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public Member updateMember(Member member) {
 
-        Member checkMember = this.memberRepository.findById(member.getMemberID())
+        Member checkMember = this.memberRepository.findById(member.getId())
                 .orElseThrow(() -> new IllegalArgumentException("Member not found"));
 
         member.setUser(checkMember.getUser());

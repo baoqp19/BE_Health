@@ -5,45 +5,34 @@ import java.time.LocalDate;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.persistence.*;
+import lombok.*;
 
-@Getter
-@Setter
+
+@Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Builder
+@Table(name = "medications")
 public class Medication {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int medicationID;
+    private int id;
 
-    @Column(name = "record_id", nullable = false)
-    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    private int recordID;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "record_id", nullable = false)
+    private MedicalRecord record;
 
     @Column(name = "name", nullable = false)
     private String name;
 
-    
     @Column(name = "frequency")
     private String frequency;
 
-
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @Column(name = "start_date", nullable = false)
     private LocalDate startDate;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @Column(name = "end_date")
     private LocalDate endDate;
 
@@ -51,3 +40,4 @@ public class Medication {
     private String note;
 
 }
+

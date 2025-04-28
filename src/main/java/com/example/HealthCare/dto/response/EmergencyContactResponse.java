@@ -5,15 +5,14 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
-
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class VaccicationResponse {
+public class EmergencyContactResponse {
     int id;
-    MemberDTO member;
-    String vaccineName;
-    Date dateAdministered;
+    UserDTO user;
+    String name;
+    String relationship;
+    String phoneNumber;
 }

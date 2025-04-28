@@ -2,6 +2,8 @@ package com.example.HealthCare.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Past;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,8 +21,7 @@ import java.time.LocalDateTime;
 public class HealthStat {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "stat_id")
-    private Integer statID;
+    private Integer id;
 
     @Column(name = "stat_type", nullable = false)
     private String statType;
@@ -32,6 +33,7 @@ public class HealthStat {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate date;
 
-    @Column(name = "member_id", nullable = false)
-    private Integer memberID;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id", nullable = false)
+    private Member member;
 }

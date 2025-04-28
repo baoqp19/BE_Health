@@ -41,7 +41,7 @@ public class EmergencyContactController {
         User user = this.userService.handleGetUserByEmail(email);
 
         EmergencyContact emergencyContact = EmergencyContact.builder()
-                .userID(user.getId())
+                .user(user)
                 .name(addEmergencyContactRequest.getName())
                 .relationship(addEmergencyContactRequest.getRelationship())
                 .phoneNumber(addEmergencyContactRequest.getPhoneNumber())
@@ -62,7 +62,7 @@ public class EmergencyContactController {
             @Valid @RequestBody UpdateEmergencyContactRequest updateEmergencyContactRequest){
 
         EmergencyContact emergencyContact = EmergencyContact.builder()
-                .contactID(id)
+                .id(id)
                 .name(updateEmergencyContactRequest.getName())
                 .relationship(updateEmergencyContactRequest.getRelationship())
                 .phoneNumber(updateEmergencyContactRequest.getPhoneNumber())

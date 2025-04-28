@@ -7,20 +7,20 @@ import lombok.*;
 
 import java.time.LocalDate;
 
-@Entity
-@Table(name = "documents")
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Entity
+@Table(name = "documents")
 public class Document {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int documentID;
+    private int id;
 
-    @Column(name = "record_id", nullable = false)
-    private int recordID;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "record_id", nullable = false)
+    private MedicalRecord record;
 
     @Column(name = "file_name", nullable = false)
     private String fileName;
@@ -29,7 +29,6 @@ public class Document {
     private String fileType;
 
     @Column(name = "upload_date")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate uploadDate;
 
     @Transient  // Không lưu thuộc tính này vào cơ sở dữ liệu

@@ -13,13 +13,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 @Table(name="emergency_contacts")
+
 public class EmergencyContact {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int contactID;
+    private int id;
 
-    @Column(name = "user_id", nullable = false)
-    private int userID;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     @Column(name = "name", nullable = false)
     private String name;
@@ -29,4 +31,6 @@ public class EmergencyContact {
 
     @Column(name = "phone_number" , nullable = false)
     private String phoneNumber;
+
+
 }

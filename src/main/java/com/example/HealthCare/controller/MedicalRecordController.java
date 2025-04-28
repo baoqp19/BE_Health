@@ -37,7 +37,7 @@ public class MedicalRecordController {
     @PostMapping("/medical-records")
 
     public ResponseEntity<MedicalRecord> addMedicalRecord(@Valid @RequestBody AddMedicalRecordRequest addMedicalRecordRequest) {
-        Member member = memberService.getMemberById(addMedicalRecordRequest.getMemberID());
+        Member member = memberService.getMemberById(addMedicalRecordRequest.getMemberId());
         MedicalRecord medicalRecord = MedicalRecord.builder()
                 .member(member)
                 .date(addMedicalRecordRequest.getDate())
@@ -58,9 +58,9 @@ public class MedicalRecordController {
             @PathVariable("id") Integer id,
             @Valid @RequestBody UpdateMedicalRecordRequest updateMedicalRecordRequest) {
 
-        Member member = memberService.getMemberById(updateMedicalRecordRequest.getMemberID());
+        Member member = memberService.getMemberById(updateMedicalRecordRequest.getMemberId());
         MedicalRecord medicalRecord = MedicalRecord.builder()
-                .recordID(id)
+                .id(id)
                 .member(member)
                 .date(updateMedicalRecordRequest.getDate())
                 .doctor(updateMedicalRecordRequest.getDoctor())

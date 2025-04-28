@@ -19,10 +19,11 @@ import java.time.LocalDate;
 public class Note {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int noteID;
+    private int id;
 
-    @Column(name = "user_id", nullable = false)
-    private int userID;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     @Column(name="title")
     private String title;
@@ -34,5 +35,9 @@ public class Note {
     private LocalDate createAt;
 
     @Column(name="note_index")
-    private int noteIndex;
+    private Long noteIndex;
+
+    @Version
+    @Column(name = "version")
+    private Long version;  // Trường version để hỗ trợ optimistic locking
 }

@@ -1,5 +1,6 @@
 package com.example.HealthCare.dto.request.note;
 
+import jakarta.persistence.Version;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
@@ -26,5 +27,5 @@ public class AddNoteRequest {
     @PastOrPresent(message = "Create date must be today or in the past")
     private java.time.LocalDate createAt;
 
-    private Integer noteIndex;
+    private Long noteIndex;
 }

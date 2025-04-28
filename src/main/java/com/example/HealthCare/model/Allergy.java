@@ -9,32 +9,28 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 
+
 @Data
-@Getter
-@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "allergies") 
+@Table(name="allergies")
 public class Allergy {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int allergyID;
+    private int id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
-    @Column(name = "allergy_type")
+    @Column(name="allergy_type")
     private String allergyType;
 
-    @Column(name = "severity")
+    @Column(name="severity")
     private String severity;
 
-    @Column(name = "symptoms")
+    @Column(name="symptoms")
     private String symptoms;
-
-
 }

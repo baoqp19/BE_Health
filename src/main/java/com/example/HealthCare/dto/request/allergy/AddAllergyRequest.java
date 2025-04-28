@@ -18,8 +18,8 @@ import lombok.Setter;
 @Setter
 public class AddAllergyRequest {
 
-    private Integer allergyID;
-    private Integer memberID;
+    private Integer id;
+    private Integer memberId;
     private Member member;
 
     @NotBlank(message = "Allergy type is required")
