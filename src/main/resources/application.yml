@@ -48,3 +48,10 @@ openai:
   jackson:
     serialization:
       WRITE_DATES_AS_TIMESTAMPS=false: false
+
+
+  #SETUP Cloudinary
+cloudinary:
+  cloud-name: dar1cnzla
+  api-key: 889187379629619
+  api-secret: UGtP7BqU1-VU5kxEVfsqoq6zuiE

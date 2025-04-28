@@ -31,6 +31,6 @@ public class Document {
     @Column(name = "upload_date")
     private LocalDate uploadDate;
 
-    @Transient  // Không lưu thuộc tính này vào cơ sở dữ liệu
+    @Column
     private String path;
 }
