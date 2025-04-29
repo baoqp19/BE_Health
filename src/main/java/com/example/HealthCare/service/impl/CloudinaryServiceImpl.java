@@ -15,11 +15,26 @@ import java.util.Map;
 public class CloudinaryServiceImpl implements CloudinaryService {
     private final Cloudinary cloudinary;
 
-    @Override
-    public Map<String, Object> uploadFile(MultipartFile file) throws IOException {
-        return cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap());
-    }
 
+    @Override
+    public String uploadFile(MultipartFile file) {
+        try {
+            Map uploadResult = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap());
+            return uploadResult.get("url").toString();
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to upload file");
+        }
+
+    }
+    @Override
+    public String uploadFile(String path) {
+        try {
+            Map uploadResult = cloudinary.uploader().upload(path, ObjectUtils.emptyMap());
+            return uploadResult.get("url").toString();
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to upload file" + e.getMessage());
+        }
+    }
     @Override
     public Map<String, Object> deleteFile(String publicId) throws IOException {
         return cloudinary.uploader().destroy(publicId, ObjectUtils.emptyMap());

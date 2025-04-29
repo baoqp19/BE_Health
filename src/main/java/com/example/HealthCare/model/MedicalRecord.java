@@ -1,8 +1,6 @@
 package com.example.HealthCare.model;
 
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -18,8 +16,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
-@Table(name = "medical_records")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@Table(name="medical_records")
 public class MedicalRecord {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,27 +30,25 @@ public class MedicalRecord {
     @Column(name = "date")
     private LocalDate date;
 
-    @Column(name = "doctor")
+    @Column(name="doctor")
     private String doctor;
 
-    @Column(name = "symptoms")
+    @Column(name="symptoms")
     private String symptoms;
 
-    @Column(name = "diagnosis")
+    @Column(name="diagnosis")
     private String diagnosis;
 
-    @Column(name = "treatment")
+    @Column(name="treatment")
     private String treatment;
 
-    @Column(name = "facility_name")
+    @Column(name="facility_name")
     private String facilityName;
 
     @OneToMany(mappedBy = "record", fetch = FetchType.LAZY)
-    @JsonIgnore
     private List<Medication> medications;
 
     @OneToMany(mappedBy = "record", fetch = FetchType.LAZY)
-    @JsonIgnore
     private List<Document> documents;
 
 }

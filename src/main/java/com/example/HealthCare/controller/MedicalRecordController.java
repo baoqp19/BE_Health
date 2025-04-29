@@ -1,7 +1,10 @@
 package com.example.HealthCare.controller;
 
 
+import com.example.HealthCare.Util.CustomPagination;
 import com.example.HealthCare.Util.SecurityUtil;
+import com.example.HealthCare.dto.MedicalRecordResponse;
+import com.example.HealthCare.dto.response.ApiResponse;
 import com.example.HealthCare.model.MedicalRecord;
 import com.example.HealthCare.model.Member;
 import com.example.HealthCare.model.User;
@@ -35,22 +38,10 @@ public class MedicalRecordController {
     }
 
     @PostMapping("/medical-records")
-
-    public ResponseEntity<MedicalRecord> addMedicalRecord(@Valid @RequestBody AddMedicalRecordRequest addMedicalRecordRequest) {
-        Member member = memberService.getMemberById(addMedicalRecordRequest.getMemberId());
-        MedicalRecord medicalRecord = MedicalRecord.builder()
-                .member(member)
-                .date(addMedicalRecordRequest.getDate())
-                .doctor(addMedicalRecordRequest.getDoctor())
-                .symptoms(addMedicalRecordRequest.getSymptoms())
-                .diagnosis(addMedicalRecordRequest.getDiagnosis())
-                .treatment(addMedicalRecordRequest.getTreatment())
-                .facilityName(addMedicalRecordRequest.getFacilityName())
-                .build();
-        log.info(medicalRecord.toString());
-        MedicalRecord createdMedicalRecord = this.medicalRecordService.addMedicalRecord(medicalRecord);
-
-        return new ResponseEntity<>(createdMedicalRecord, HttpStatus.OK);
+    public ResponseEntity<?> addMedicalRecord(
+            @Valid @RequestBody AddMedicalRecordRequest addMedicalRecordRequest) {
+        MedicalRecord medicalRecord = medicalRecordService.addMedicalRecord(addMedicalRecordRequest);
+        return new ResponseEntity<>(medicalRecord, HttpStatus.OK);
     }
 
     @PutMapping("/medical-records/{id}")
@@ -87,7 +78,7 @@ public class MedicalRecordController {
     }
 
     @GetMapping("/medical-records")
-    public ResponseEntity<List<?>> getAllMedicalRecords(
+    public ResponseEntity<?> getAllMedicalRecords(
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "8") int size,
             @RequestParam(defaultValue = "") String keyword) {
@@ -96,10 +87,8 @@ public class MedicalRecordController {
 
         User user = this.userService.handleGetUserByEmail(email);
 
-        Page<MedicalRecord> medicalRecordsPage = this.medicalRecordService.getAllMedicalRecords(page,size,keyword,user.getId());
-        List<MedicalRecord> medicalRecords = medicalRecordsPage.getContent();
+        CustomPagination<MedicalRecordResponse> medicalRecordsPage = medicalRecordService.getAllMedicalRecords(page,size,keyword,user.getId());
 
-
-        return new ResponseEntity<>(medicalRecords, HttpStatus.OK);
+        return new ResponseEntity<>(medicalRecordsPage, HttpStatus.OK);
     }
 }

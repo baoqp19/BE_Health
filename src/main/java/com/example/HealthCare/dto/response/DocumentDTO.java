@@ -1,6 +1,5 @@
 package com.example.HealthCare.dto.response;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,12 +9,11 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserResponse {
-
-    Integer id;
-    String firstname;
-    String lastname;
-
-    @JsonProperty("email")
-    String email;
+public class DocumentDTO {
+    private int id;
+    private String name;
+    private int position;
+    private String path;
+    private String type;
+    private Long size;
 }
